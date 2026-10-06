@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>আমার ২০২৬ – Year Recap</title>
+<meta name="description" content="কয়েকটা প্রশ্নের উত্তর দাও, তোমার ২০২৬ সালের গল্প বাংলায় সাজিয়ে দেবো, সাথে শেয়ার করার কার্ড।">
+<meta property="og:title" content="আমার ২০২৬ – Year Recap">
+<meta property="og:description" content="তোমার বছরের গল্প, বাংলায়। ছবি দিয়ে বানাও নিজের শেয়ার কার্ড।">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2E1239">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atma:wght@500;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --plum:#2E1239; --pink:#E8367C; --orange:#F26B1D; --yellow:#FFC72C;
+  --green:#14855A; --blue:#2847B8; --cream:#FFF4E2; --ink:#2E1239;
+  --bg:var(--plum); --fg:var(--cream);
+  --display:"Atma","Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --body:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+}
+/* the experience is full-colour by design; dark/light both use the same slide palette */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#22092B}}
+:root[data-theme="dark"]{--bg:#22092B}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:18px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid currentColor;outline-offset:4px}
+
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) 24px calc(env(safe-area-inset-bottom,0px) + 24px);
+  background:var(--sbg,var(--bg));color:var(--sfg,var(--fg));transition:background .45s ease,color .45s ease;overflow-y:auto}
+.inner{width:100%;max-width:560px;margin:0 auto;flex:1;display:flex;flex-direction:column}
+[hidden]{display:none!important}
+
+/* ---------- intro ---------- */
+#intro{--sbg:var(--plum);--sfg:var(--cream)}
+.year{font-family:var(--display);font-weight:700;line-height:.8;margin:auto 0 0;font-size:clamp(150px,46vw,300px);letter-spacing:-.02em}
+.year span{display:inline-block;animation:drop .7s cubic-bezier(.2,1.4,.4,1) both}
+.year span:nth-child(1){color:var(--pink);animation-delay:.05s}
+.year span:nth-child(2){color:var(--orange);animation-delay:.15s}
+.year span:nth-child(3){color:var(--yellow);animation-delay:.25s}
+.year span:nth-child(4){color:#4FD08F;animation-delay:.35s}
+@keyframes drop{from{transform:translateY(-60%) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+.lead{font-family:var(--display);font-weight:500;font-size:clamp(28px,7vw,40px);line-height:1.2;margin:18px 0 10px}
+.sub{opacity:.8;margin:0 0 28px;max-width:34ch}
+.cta{align-self:flex-start;border:0;border-radius:999px;padding:16px 34px;font-weight:700;font-size:20px;cursor:pointer;background:var(--yellow);color:var(--ink);min-height:58px}
+.cta:disabled{opacity:.45;cursor:default}
+.small{font-size:15px;opacity:.7;margin-top:14px}
+
+/* ---------- questions ---------- */
+.top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.dots{display:flex;gap:5px;flex:1}
+.dots i{height:5px;flex:1;border-radius:5px;background:currentColor;opacity:.25}
+.dots i.on{opacity:1}
+.iconbtn{background:none;border:0;cursor:pointer;padding:8px 4px;font-weight:600;font-size:16px;min-height:44px;opacity:.85}
+.qwrap{margin:auto 0;padding:24px 0}
+.emoji{font-size:56px;line-height:1;margin-bottom:14px;display:block}
+.q{font-family:var(--display);font-weight:700;font-size:clamp(32px,8.5vw,52px);line-height:1.15;margin:0 0 10px}
+.hint{opacity:.8;margin:0 0 26px}
+.field{width:100%;background:transparent;border:0;border-bottom:3px solid currentColor;padding:8px 0;font-size:clamp(22px,5.5vw,28px);font-weight:500;border-radius:0}
+.field::placeholder{color:currentColor;opacity:.45}
+.field:focus{outline:none;border-bottom-width:5px}
+textarea.field{resize:none;min-height:3.4em;line-height:1.4}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pick{border:2px solid currentColor;background:transparent;border-radius:999px;padding:7px 15px;cursor:pointer;font-weight:600;font-size:16px;min-height:42px}
+.pick[aria-pressed="true"]{background:var(--sfg);color:var(--sbg)}
+.trio{display:grid;gap:22px}
+.trio label{display:block;font-weight:600;font-size:15px;opacity:.8}
+.score{display:flex;align-items:baseline;gap:10px;font-family:var(--display);font-weight:700}
+.score b{font-size:clamp(110px,30vw,170px);line-height:1}
+.score span{font-size:36px;opacity:.7}
+input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
+.scale{display:flex;justify-content:space-between;font-size:15px;opacity:.75}
+.bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.err{font-weight:600;min-height:1.4em;margin:10px 0 0}
+
+/* ---------- loading ---------- */
+#loading{--sbg:var(--pink);--sfg:var(--cream);justify-content:center}
+#loading .inner{justify-content:center}
+.spin{font-family:var(--display);font-weight:700;font-size:clamp(90px,26vw,150px);line-height:1;animation:wob 1.4s ease-in-out infinite}
+@keyframes wob{0%,100%{transform:rotate(-4deg) scale(1)}50%{transform:rotate(4deg) scale(1.06)}}
+#loadmsg{font-family:var(--display);font-weight:500;font-size:clamp(24px,6vw,34px);margin:18px 0 6px;min-height:2.6em}
+
+/* ---------- story ---------- */
+#story{padding-top:calc(env(safe-area-inset-top,0px) + 14px);user-select:none;-webkit-user-select:none}
+.bars{display:flex;gap:5px;max-width:560px;width:100%;margin:0 auto 6px}
+.bars i{flex:1;height:4px;border-radius:4px;background:currentColor;opacity:.3;overflow:hidden;position:relative}
+.bars i.done{opacity:1}
+.bars i.now{opacity:1;background:transparent}
+.bars i.now::before{content:"";position:absolute;inset:0;background:currentColor;opacity:.3}
+.bars i.now::after{content:"";position:absolute;inset:0;background:currentColor;transform-origin:left;animation:fill var(--dur,7s) linear forwards}
+.bars.paused i.now::after{animation-play-state:paused}
+@keyframes fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.storyhead{display:flex;justify-content:space-between;align-items:center;max-width:560px;width:100%;margin:0 auto;font-size:15px;font-weight:600}
+.slide{flex:1;display:flex;flex-direction:column;justify-content:center;max-width:560px;width:100%;margin:0 auto;padding:16px 0;animation:in .45s ease both}
+@keyframes in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.kicker{font-weight:600;font-size:17px;opacity:.85;margin:0 0 10px}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(40px,11vw,68px);line-height:1.08;margin:0 0 16px}
+.para{font-size:clamp(19px,4.6vw,22px);line-height:1.6;margin:0}
+.stack span{display:block;font-family:var(--display);font-weight:700;font-size:clamp(54px,16vw,104px);line-height:1.05}
+.stack span:nth-child(2){padding-left:1.2ch}
+.stack span:nth-child(3){padding-left:2.4ch}
+.award{padding:14px 0;border-top:2px solid currentColor}
+.award:last-child{border-bottom:2px solid currentColor}
+.award b{display:block;font-family:var(--display);font-weight:700;font-size:26px;line-height:1.2}
+.award span{opacity:.85}
+.tapzones{position:absolute;inset:0;display:flex;z-index:1}
+.tapzones div{flex:1}
+.tapzones div:first-child{flex:.45}
+.slide, .storyhead, .bars{position:relative;z-index:2;pointer-events:none}
+.slide button,.slide a,.storyhead button{pointer-events:auto}
+.sharewrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+.sharewrap img{width:min(68vw,300px);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.35);transform:rotate(-2deg)}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.ghost{border:2px solid currentColor;background:transparent;border-radius:999px;padding:12px 22px;font-weight:700;cursor:pointer;min-height:50px}
+.msg{min-height:1.5em;font-weight:600;text-align:center;margin:0}
+
+/* ---------- card editor ---------- */
+#edit{--sbg:var(--cream);--sfg:var(--plum);padding-top:calc(env(safe-area-inset-top,0px) + 8px)}
+.ed{width:100%;max-width:1040px;margin:0 auto}
+.edhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0 10px}
+.edhead h2{font-family:var(--display);font-weight:700;font-size:30px;margin:0}
+.edgrid{display:grid;grid-template-columns:1fr;gap:20px}
+.pvwrap{position:sticky;top:-8px;z-index:3;background:var(--cream);padding:8px 0 12px;display:flex;flex-direction:column;align-items:center;gap:6px}
+#pv,#storycard{display:block;height:auto;border-radius:16px;box-shadow:0 14px 34px rgba(46,18,57,.28)}
+#pv{width:min(44vw,210px)}
+#pv.dragok{cursor:grab;touch-action:none}
+#pv.dragok:active{cursor:grabbing}
+#storycard{width:min(62vw,290px);transform:rotate(-2deg)}
+.ctrls{display:flex;flex-direction:column;gap:22px;padding-bottom:24px}
+.ctrls fieldset{border:0;padding:0;margin:0}
+.ctrls legend{font-family:var(--display);font-weight:700;font-size:22px;padding:0;margin-bottom:10px}
+.ctrls label.lbl{display:block;font-weight:600;font-size:15px;margin:10px 0 4px;opacity:.8}
+.ctrls input[type=text],.ctrls textarea,.ctrls select{width:100%;border:2px solid rgba(46,18,57,.25);background:#fff;border-radius:12px;padding:10px 12px;font-size:18px;color:var(--plum)}
+.ctrls input[type=text]:focus,.ctrls textarea:focus,.ctrls select:focus{outline:none;border-color:var(--pink)}
+.ctrls textarea{resize:vertical;min-height:84px;line-height:1.4}
+.w3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.filebtn{display:inline-flex;align-items:center;cursor:pointer;font-size:18px;padding:12px 26px;min-height:52px}
+.ctrls input[type=range]{accent-color:var(--pink)}
+.prow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+.sw{display:flex;gap:12px;flex-wrap:wrap}
+.sw button{width:52px;height:52px;border-radius:50%;cursor:pointer;border:3px solid rgba(46,18,57,.2);position:relative}
+.sw button[aria-pressed="true"]{border-color:var(--plum);box-shadow:0 0 0 3px var(--cream),0 0 0 6px var(--plum)}
+.sw button span{position:absolute;inset:auto 0 -24px;font-size:13px;font-weight:600;white-space:nowrap}
+.sw{padding-bottom:22px}
+#edit .pick[aria-pressed="true"]{background:var(--plum);color:var(--cream)}
+.qa{display:flex;flex-direction:column;gap:12px}
+.qa-item{background:#fff;border:2px solid rgba(46,18,57,.15);border-radius:14px;padding:10px 12px}
+.qa-item.off{opacity:.55}
+.qa-item label{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer;min-height:36px}
+.qa-item input[type=checkbox]{width:22px;height:22px;accent-color:var(--pink)}
+.qa-item textarea{margin-top:6px;min-height:58px!important;font-size:17px!important}
+.fitmsg{font-weight:600;color:#B0174F;margin:6px 0 0;min-height:1.2em}
+@media (min-width:860px){
+  .edgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+  .pvwrap{top:0}
+  #pv{width:min(100%,380px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .year span,.slide,.spin{animation:none}
+  .screen{transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- intro -->
+<section class="screen" id="intro">
+  <div class="inner">
+    <h1 class="year" aria-label="২০২৬"><span>২</span><span>০</span><span>২</span><span>৬</span></h1>
+    <p class="lead">তোমার বছর, তোমার গল্প</p>
+    <p class="sub">কয়েকটা প্রশ্নের উত্তর দাও। বছরটা গল্পের মতো সাজিয়ে দেখাবো, শেষে পাবে শেয়ার করার কার্ড।</p>
+    <button class="cta" id="start">শুরু করি</button>
+    <p class="small" id="resume" hidden></p>
+    <p class="small">৩ মিনিট লাগবে। উত্তরগুলো শুধু তোমার গল্প লেখার কাজে লাগে, কোথাও জমা রাখা হয় না।</p>
+  </div>
+</section>
+
+<!-- questions -->
+<section class="screen" id="ask" hidden>
+  <div class="inner">
+    <div class="top">
+      <button class="iconbtn" id="back" aria-label="আগের প্রশ্ন">← পেছনে</button>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+    </div>
+    <div class="qwrap" id="qbox" aria-live="polite"></div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="bottom">
+      <button class="iconbtn" id="skip">বাদ দাও</button>
+      <button class="cta" id="next">পরেরটা</button>
+    </div>
+  </div>
+</section>
+
+<!-- loading -->
+<section class="screen" id="loading" hidden>
+  <div class="inner" aria-live="polite">
+    <div class="spin" aria-hidden="true">২০২৬</div>
+    <p id="loadmsg">তোমার গল্প লেখা হচ্ছে…</p>
+    <p class="small">এক মিনিটের মতো লাগতে পারে</p>
+  </div>
+</section>
+
+<!-- story -->
+<section class="screen" id="story" hidden>
+  <div class="bars" id="bars" aria-hidden="true"></div>
+  <div class="storyhead"><span id="who"></span><button class="iconbtn" id="restart">নতুন করে</button></div>
+  <div class="tapzones" id="tap"><div id="tprev"></div><div id="tnext"></div></div>
+  <div class="slide" id="slide" aria-live="polite"></div>
+</section>
+
+<!-- card editor -->
+<section class="screen" id="edit" hidden>
+ <div class="ed">
+  <div class="edhead"><button class="iconbtn" id="edBack">← গল্পে ফেরো</button><h2>কার্ড সাজাও</h2></div>
+  <div class="edgrid">
+   <div class="pvwrap">
+     <canvas id="pv" width="1080" height="1920" role="img" aria-label="কার্ডের প্রিভিউ"></canvas>
+     <p class="small" id="dragHint" hidden>ছবির ওপর টেনে জায়গা ঠিক করো</p>
+   </div>
+   <div class="ctrls">
+     <fieldset><legend>তোমার ছবি</legend>
+       <label class="cta filebtn" for="file" id="fileLbl">📷 ছবি দাও</label>
+       <input type="file" id="file" accept="image/*" hidden>
+       <div id="photoCtl" hidden>
+         <label class="lbl" for="zoom">জুম</label><input type="range" id="zoom" min="1" max="3" step="0.01" value="1" style="width:100%">
+         <div class="prow"><button class="ghost" id="rmPhoto">ছবি সরাও</button></div>
+       </div>
+       <p class="small">ছবি তোমার ফোনেই থাকে, কোথাও আপলোড হয় না।</p>
+     </fieldset>
+     <fieldset><legend>ডিজাইন</legend><div class="picks" id="layouts" style="margin-top:0"></div></fieldset>
+     <fieldset id="fmtField"><legend>সাইজ</legend><div class="picks" id="fmts" style="margin-top:0"></div></fieldset>
+     <fieldset><legend>রং</legend><div class="sw" id="sw"></div></fieldset>
+     <fieldset><legend>লেখা</legend>
+       <label class="lbl" for="eName">নাম</label><input type="text" id="eName" maxlength="40">
+       <div id="posterFields">
+         <label class="lbl">বছর তিন শব্দে</label>
+         <div class="w3"><input type="text" id="eW0" maxlength="18" aria-label="প্রথম শব্দ"><input type="text" id="eW1" maxlength="18" aria-label="দ্বিতীয় শব্দ"><input type="text" id="eW2" maxlength="18" aria-label="তৃতীয় শব্দ"></div>
+         <label class="lbl" for="eQuote">তোমার কথা</label><textarea id="eQuote" maxlength="110" placeholder="কার্ডে যা লিখতে চাও"></textarea>
+       </div>
+       <div id="qaFields">
+         <label class="lbl">প্রশ্ন আর তোমার উত্তর (টিক দেওয়াগুলো কার্ডে থাকবে, উত্তর বদলাতে পারো)</label>
+         <div class="qa" id="qaList"></div>
+         <p class="fitmsg" id="fitMsg" aria-live="polite"></p>
+       </div>
+     </fieldset>
+     <fieldset><legend>কার্ডে কী থাকবে</legend>
+       <div class="picks" id="toggles" style="margin-top:0"></div>
+       <div id="awardPick" hidden><label class="lbl" for="eAward">কোন অ্যাওয়ার্ড</label><select id="eAward"></select></div>
+     </fieldset>
+     <div class="prow"><button class="cta" id="edShare">শেয়ার করো</button><button class="ghost" id="edSave">সেভ করো</button></div>
+     <p class="msg" id="edMsg" aria-live="polite" style="text-align:left"></p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<script>
+const $=id=>document.getElementById(id);
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const C={plum:"#2E1239",pink:"#E8367C",orange:"#F26B1D",yellow:"#FFC72C",green:"#14855A",blue:"#2847B8",cream:"#FFF4E2"};
+const THEMES=[[C.pink,C.cream],[C.yellow,C.plum],[C.green,C.cream],[C.blue,C.cream],[C.orange,C.cream],[C.cream,C.plum],[C.plum,C.yellow]];
+
+function show(id){["intro","ask","loading","story","edit"].forEach(s=>$(s).hidden=s!==id);}
+function paint(el,i){const [b,f]=THEMES[i%THEMES.length];el.style.setProperty("--sbg",b);el.style.setProperty("--sfg",f);}
+
+/* ---------- questions ---------- */
+const Q=[
+ {k:"name",e:"👋",q:"তোমার নাম কী?",h:"কার্ডে এই নামটাই থাকবে।",type:"input",ph:"নাম লেখো",req:true},
+ {k:"score",e:"🎯",q:"বছরটাকে ১০-এ কত দেবে?",h:"মনে যা আসে, অত ভাবতে হবে না।",type:"score"},
+ {k:"three",e:"✍️",q:"এই বছরটা তিন শব্দে",h:"নিজে লেখো, অথবা নিচ থেকে বেছে নাও।",type:"input",ph:"যেমন: ব্যস্ত, শেখা, সাহস",picks:["ব্যস্ত","শেখা","সাহস","ভালোবাসা","পরিবর্তন","ধৈর্য","মজা","ক্লান্তি","নতুন শুরু","স্বপ্ন","পরিবার","বন্ধুত্ব"],max:3},
+ {k:"happy",e:"🌟",q:"সবচেয়ে খুশির মুহূর্ত?",h:"ছোট হোক বা বড়।",type:"area",ph:"যেমন: প্রথম বেতনে মাকে শাড়ি কিনে দিলাম"},
+ {k:"hard",e:"🌧️",q:"কঠিন সময় এসেছিল?",h:"কীভাবে পার হলে? না চাইলে বাদ দাও।",type:"area",ph:"",skippable:true},
+ {k:"learn",e:"🧠",q:"নতুন কী শিখলে?",h:"দক্ষতা, অভ্যাস, বা জীবনের কোনো শিক্ষা।",type:"input",ph:"যা শিখলে লেখো",picks:["রান্না","ড্রাইভিং","নতুন ভাষা","কোডিং","টাকা জমানো","না বলা","ধৈর্য ধরা","সাঁতার"]},
+ {k:"travel",e:"🧳",q:"কোথায় কোথায় ঘুরলে?",h:"গ্রামের বাড়ি, নানুবাড়িও গোনা হবে।",type:"input",ph:"সিলেট, কক্সবাজার, নানুবাড়ি"},
+ {k:"favs",e:"❤️",q:"বছরের প্রিয় তিনটা জিনিস",h:"",type:"trio",f:[["food","প্রিয় খাবার","কাচ্চি"],["song","প্রিয় গান, নাটক বা সিনেমা","লেখো"],["person","পাশে থাকা প্রিয় মানুষ","আম্মু, বন্ধু রাফি"]]},
+ {k:"win",e:"🏆",q:"সবচেয়ে বড় অর্জন?",h:"নিজেকে নিয়ে গর্ব হয় এমন কিছু।",type:"area",ph:"যেমন: চাকরি পেলাম, ওজন কমালাম"},
+ {k:"next",e:"🚀",q:"২০২৭-এ কী চাও?",h:"একটা স্বপ্ন বা লক্ষ্য।",type:"area",ph:""},
+ {k:"tone",e:"🎨",q:"গল্পটা কেমন সুরে লিখবো?",h:"",type:"choice",opts:["মজার","আবেগী","অনুপ্রেরণামূলক"]},
+];
+let qi=0; let A={score:7,tone:"মজার"};
+try{const s=JSON.parse(localStorage.getItem("amar2026")||"null");if(s&&s.name){A={...A,...s};$("resume").hidden=false;$("resume").textContent=`${s.name}, আগের উত্তরগুলো রাখা আছে।`;}}catch(e){}
+const keep=()=>{try{localStorage.setItem("amar2026",JSON.stringify(A));}catch(e){}};
+
+$("dots").innerHTML=Q.map(()=>"<i></i>").join("");
+function renderQ(){
+  const s=Q[qi]; paint($("ask"),qi); $("err").textContent="";
+  [...$("dots").children].forEach((d,j)=>d.classList.toggle("on",j<=qi));
+  let h=`<span class="emoji" aria-hidden="true">${s.e}</span><h2 class="q" id="qh">${s.q}</h2>${s.h?`<p class="hint">${s.h}</p>`:""}`;
+  if(s.type==="input")h+=`<input class="field" id="f" aria-labelledby="qh" maxlength="160" placeholder="${s.ph}" autocomplete="off">`;
+  if(s.type==="area")h+=`<textarea class="field" id="f" aria-labelledby="qh" maxlength="500" rows="2" placeholder="${s.ph}"></textarea>`;
+  if(s.picks)h+=`<div class="picks">${s.picks.map(p=>`<button type="button" class="pick" aria-pressed="false">${p}</button>`).join("")}</div>`;
+  if(s.type==="trio")h+=`<div class="trio">${s.f.map(([k,l,p])=>`<div><label for="t_${k}">${l}</label><input class="field" id="t_${k}" maxlength="100" placeholder="${p}" autocomplete="off"></div>`).join("")}</div>`;
+  if(s.type==="score")h+=`<div class="score"><b id="sv">${bn(A.score)}</b><span>/ ১০</span></div><input type="range" id="f" min="1" max="10" step="1" value="${A.score}" aria-labelledby="qh"><div class="scale"><span>খুব কঠিন গেছে</span><span>দারুণ গেছে</span></div>`;
+  if(s.type==="choice")h+=`<div class="picks" role="group" aria-labelledby="qh">${s.opts.map(o=>`<button type="button" class="pick" aria-pressed="${A.tone===o}">${o}</button>`).join("")}</div>`;
+  $("qbox").innerHTML=h;
+  const f=$("f");
+  if(f&&s.type!=="score"){f.value=A[s.k]||"";setTimeout(()=>f.focus({preventScroll:true}),60);
+    f.addEventListener("keydown",e=>{if(e.key==="Enter"&&s.type==="input"){e.preventDefault();go(1);}});
+    if(s.picks){const sync=()=>{const cur=f.value.split(/[,،]/).map(x=>x.trim()).filter(Boolean);$("qbox").querySelectorAll(".pick").forEach(b=>b.setAttribute("aria-pressed",cur.includes(b.textContent)));};
+      f.addEventListener("input",sync);sync();
+      $("qbox").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{let cur=f.value.split(/[,،]/).map(x=>x.trim()).filter(Boolean);
+        if(cur.includes(b.textContent))cur=cur.filter(x=>x!==b.textContent);else{if(s.max&&cur.length>=s.max)cur.shift();cur.push(b.textContent);}
+        f.value=cur.join(", ");sync();});}}
+  if(s.type==="score")f.oninput=()=>{A.score=+f.value;$("sv").textContent=bn(f.value);};
+  if(s.type==="trio")s.f.forEach(([k])=>$("t_"+k).value=A[k]||"");
+  if(s.type==="choice")$("qbox").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{A.tone=b.textContent;$("qbox").querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",x===b));});
+  $("back").style.visibility=qi?"visible":"hidden";
+  $("skip").style.visibility=(s.req||s.type==="score"||s.type==="choice")?"hidden":"visible";
+  $("next").textContent=qi===Q.length-1?"গল্প বানাও ✨":"পরেরটা";
+}
+function save(){const s=Q[qi];
+  if(s.type==="input"||s.type==="area")A[s.k]=$("f").value.trim();
+  if(s.type==="trio")s.f.forEach(([k])=>A[k]=$("t_"+k).value.trim());
+  keep();}
+function go(d,skip){
+  if(skip){const s=Q[qi];if(s.type==="trio")s.f.forEach(([k])=>A[k]="");else A[s.k]="";keep();} else save();
+  if(d>0&&Q[qi].req&&!A[Q[qi].k]){$("err").textContent="নামটা লাগবে, কার্ডে বসবে।";return;}
+  if(d>0&&qi===Q.length-1)return generate();
+  qi=Math.max(0,qi+d);renderQ();}
+$("start").onclick=()=>{qi=0;show("ask");renderQ();};
+$("next").onclick=()=>go(1);
+$("skip").onclick=()=>go(1,true);
+$("back").onclick=()=>go(-1);
+
+/* ---------- generate ---------- */
+const MSGS=["তোমার গল্প লেখা হচ্ছে…","খুশির দিনগুলো খুঁজে বের করছি…","অ্যাওয়ার্ড ঠিক করা হচ্ছে…","শেষ লাইনটা ঘষামাজা চলছে…"];
+function answers(){
+  return [["নাম",A.name],["বছরের নম্বর (১০-এ)",A.score],["তিন শব্দে",A.three],["খুশির মুহূর্ত",A.happy],["কঠিন সময়",A.hard],["নতুন শেখা",A.learn],["ঘোরাঘুরি",A.travel],["প্রিয় খাবার",A.food],["প্রিয় গান/সিনেমা",A.song],["প্রিয় মানুষ",A.person],["বড় অর্জন",A.win],["২০২৭-এর চাওয়া",A.next]]
+   .filter(([,v])=>v!==""&&v!=null).map(([k,v])=>`${k}: ${v}`).join("\n");
+}
+function buildPrompt(){return `Write a short, warm "year wrapped" story for an ordinary person in Bangladesh, in natural Bangladeshi Bengali (Bengali script). Tone: ${A.tone}. Address them as "তুমি".
+Use ONLY facts from the answers. Never invent events, people, places or numbers. Skip anything missing. Be gentle about hard times, never joke about them.
+
+Answers:
+${answers()}
+
+Reply with only JSON:
+{"title":"catchy title, max 7 words","opening":"1-2 short sentences","words":["exactly 3 single words or short phrases for the year"],"scoreLine":"one playful line about their score out of 10","chapters":[{"emoji":"one emoji","heading":"max 5 words","text":"max 2 short sentences"}],"awards":[{"name":"fun award, max 5 words","reason":"max 12 words"}],"closing":"1-2 sentences about 2027","cardLine":"one quotable line, max 12 words"}
+chapters: 2-4. awards: exactly 3.`;}
+let R=null;
+async function generate(){
+  show("loading");paint($("loading"),0);let m=0;
+  const t=setInterval(()=>{m=(m+1)%MSGS.length;$("loadmsg").textContent=MSGS[m];paint($("loading"),m);},3500);
+  let d=null;
+  try{
+    if(window.claude){
+      const sample=await claude.use("sample");
+      if(sample) d=await sample.json(buildPrompt(),{modelTier:"default"});
+    }else{
+      const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),45000);
+      const r=await fetch("/api/recap",{method:"POST",headers:{"Content-Type":"application/json"},signal:ctl.signal,
+        body:JSON.stringify({tone:A.tone,answers:{name:A.name,score:A.score,three:A.three,happy:A.happy,hard:A.hard,learn:A.learn,travel:A.travel,food:A.food,song:A.song,person:A.person,win:A.win,next:A.next}})});
+      clearTimeout(to);
+      if(r.ok) d=await r.json();
+    }
+  }catch(e){d=null;}
+  clearInterval(t);
+  R=(d&&d.title)?d:local();
+  if(!R.words||!R.words.length)R.words=local().words;
+  startStory();
+}
+function local(){
+  const w=(A.three||"").split(/[,،]/).map(s=>s.trim()).filter(Boolean).slice(0,3);
+  const ch=[];
+  if(A.happy)ch.push({emoji:"🌟",heading:"সবচেয়ে খুশির দিন",text:A.happy});
+  if(A.hard)ch.push({emoji:"🌧️",heading:"যে ঝড় পার করলে",text:A.hard});
+  if(A.learn)ch.push({emoji:"🧠",heading:"নতুন যা শিখলে",text:A.learn});
+  if(A.travel)ch.push({emoji:"🧳",heading:"পথে পথে",text:A.travel});
+  const aw=[];
+  if(A.win)aw.push({name:"বছরের সেরা অর্জন",reason:A.win});
+  if(A.food)aw.push({name:"পেটের রাজা",reason:A.food});
+  if(A.person)aw.push({name:"পাশে থাকার পুরস্কার",reason:A.person});
+  if(A.song&&aw.length<3)aw.push({name:"বছরের গান",reason:A.song});
+  return{title:"এই ছিল তোমার ২০২৬",opening:"পুরো একটা বছর পার করে এলে। চলো একবার ফিরে দেখি।",words:w.length?w:["অনেক","গল্পের","বছর"],
+    scoreLine:A.score>=8?"বছরটা ভালোই গেছে, মানতে হবে!":A.score>=5?"উঠা-নামা ছিল, কিন্তু টিকে গেছ।":"কঠিন বছর ছিল, তবু তুমি এখানে।",
+    chapters:ch,awards:aw.slice(0,3),closing:A.next?`২০২৭-এ তোমার চাওয়া: ${A.next}। সেটা সত্যি হোক।`:"নতুন বছরটা আরও সুন্দর হোক।",
+    cardLine:"একটা বছর, অনেক গল্প।"};
+}
+
+/* ---------- story ---------- */
+let S=[],si=0,CARD=null,timer=null;
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function buildSlides(){
+  S=[];
+  S.push({html:`<p class="kicker">${esc(A.name)}-এর</p><h2 class="big">${esc(R.title)}</h2><p class="para">${esc(R.opening)}</p>`});
+  S.push({html:`<p class="kicker">বছরটা তিন শব্দে</p><div class="stack">${R.words.slice(0,3).map(w=>`<span>${esc(w)}</span>`).join("")}</div>`});
+  S.push({html:`<p class="kicker">তুমি বছরটাকে দিলে</p><div class="score"><b>${bn(A.score)}</b><span>/ ১০</span></div><p class="para">${esc(R.scoreLine||"")}</p>`});
+  (R.chapters||[]).forEach(c=>S.push({html:`<span class="emoji" aria-hidden="true">${esc(c.emoji||"✨")}</span><h2 class="big">${esc(c.heading)}</h2><p class="para">${esc(c.text)}</p>`}));
+  if(R.awards&&R.awards.length)S.push({dur:9,html:`<h2 class="big">বছরের অ্যাওয়ার্ড</h2>${R.awards.map(a=>`<div class="award"><b>🏆 ${esc(a.name)}</b><span>${esc(a.reason)}</span></div>`).join("")}`});
+  S.push({html:`<p class="kicker">সামনে ২০২৭</p><h2 class="big">${esc(R.closing)}</h2>`});
+  S.push({final:true,html:`<div class="sharewrap"><canvas id="storycard" width="1080" height="1920" role="img" aria-label="তোমার ২০২৬ কার্ড"></canvas><div class="row"><button class="cta" id="edOpen">✏️ ছবি দাও, কার্ড সাজাও</button></div><div class="row"><button class="ghost" id="sh">শেয়ার করো</button><button class="ghost" id="dl">সেভ করো</button><button class="ghost" id="cp">লেখা কপি</button><button class="ghost" id="replay">আবার দেখো</button></div><p class="msg" id="msg" aria-live="polite"></p></div>`});
+}
+function startStory(){buildSlides();initCS();si=0;$("who").textContent=A.name+"-এর ২০২৬";show("story");$("bars").innerHTML=S.map(()=>"<i></i>").join("");fontsReady=loadFonts();goSlide(0);}
+function goSlide(n){
+  if(n<0)n=0; if(n>=S.length)n=S.length-1; si=n;
+  const sl=S[n]; paint($("story"),n);
+  [...$("bars").children].forEach((b,j)=>{b.className=j<n?"done":j===n?"now":"";});
+  const bar=$("bars").children[n]; bar.style.setProperty("--dur",(sl.dur||7)+"s");
+  if(sl.final||RM)bar.className="done";
+  else bar.addEventListener("animationend",()=>{if(si===n)goSlide(n+1);},{once:true});
+  const el=$("slide");el.style.animation="none";el.offsetHeight;el.style.animation="";el.innerHTML=sl.html;
+  if(sl.final)wireFinal();
+}
+function wireFinal(){
+  const sc=$("storycard");fontsReady.then(()=>drawCard(sc));
+  $("dl").onclick=()=>saveCard(sc,"msg");$("sh").onclick=()=>shareCard(sc,"msg");$("cp").onclick=copyText;$("replay").onclick=()=>goSlide(0);
+  $("edOpen").onclick=openEditor;
+}
+$("tprev").onclick=()=>goSlide(si-1);
+$("tnext").onclick=()=>goSlide(si+1);
+const tap=$("tap");
+tap.addEventListener("pointerdown",()=>$("bars").classList.add("paused"));
+["pointerup","pointercancel","pointerleave"].forEach(ev=>tap.addEventListener(ev,()=>$("bars").classList.remove("paused")));
+document.addEventListener("keydown",e=>{if($("story").hidden)return;if(e.key==="ArrowRight")goSlide(si+1);if(e.key==="ArrowLeft")goSlide(si-1);});
+$("restart").onclick=()=>{qi=0;show("ask");renderQ();};
+
+/* ---------- share card 1080x1920 ---------- */
+const TC={
+ plum:{n:"বেগুনি",bg:C.plum,fg:C.cream,acc:C.yellow,pill:C.pink,pillFg:C.cream,foot:C.orange,footFg:C.plum,year:[C.pink,C.orange,C.yellow,"#4FD08F"],bands:[[C.pink,C.cream],[C.yellow,C.plum],[C.green,C.cream]]},
+ pink:{n:"গোলাপি",bg:C.pink,fg:C.cream,acc:C.yellow,pill:C.plum,pillFg:C.yellow,foot:C.plum,footFg:C.yellow,year:[C.cream,C.yellow,C.cream,C.yellow],bands:[[C.plum,C.cream],[C.yellow,C.plum],[C.blue,C.cream]]},
+ cream:{n:"ক্রিম",bg:C.cream,fg:C.plum,acc:C.pink,pill:C.blue,pillFg:C.cream,foot:C.green,footFg:C.cream,year:[C.pink,C.orange,C.green,C.blue],bands:[[C.orange,C.cream],[C.green,C.cream],[C.blue,C.cream]]},
+ green:{n:"সবুজ",bg:C.green,fg:C.cream,acc:C.yellow,pill:C.pink,pillFg:C.cream,foot:C.yellow,footFg:C.plum,year:[C.yellow,C.cream,C.yellow,C.cream],bands:[[C.pink,C.cream],[C.yellow,C.plum],[C.plum,C.cream]]},
+};
+let CS=null, fontsReady=Promise.resolve(), PBOX=null, OVER=false;
+const QAF=[["three","✍️","বছরটা তিন শব্দে"],["happy","🌟","সবচেয়ে খুশির মুহূর্ত"],["hard","🌧️","কঠিন সময় পার করলাম যেভাবে"],["learn","🧠","নতুন যা শিখলাম"],["travel","🧳","যেখানে ঘুরলাম"],["food","🍛","প্রিয় খাবার"],["song","🎵","প্রিয় গান/সিনেমা"],["person","❤️","পাশে ছিল যে"],["win","🏆","সবচেয়ে বড় অর্জন"],["next","🚀","২০২৭-এ চাই"]];
+const FAVK=["food","song","person"];
+function initCS(){
+  const w=(R.words||[]).slice(0,3);while(w.length<3)w.push("");
+  const threeAns=(A.three||"").trim()||w.filter(Boolean).join(", ");
+  CS={layout:"qa",fmt:"story",name:A.name||"",words:w,quote:R.cardLine||"",showScore:true,showWords:true,showQuote:true,showAward:false,award:0,theme:"plum",photo:null,zoom:1,ox:0,oy:0,
+    qa:QAF.map(([k,e,q])=>{const a=k==="three"?threeAns:(A[k]||"");return{k,e,q,a,on:!!a&&k!=="hard"};})};
+}
+function loadFonts(){return Promise.all([document.fonts.load('700 200px "Atma"'),document.fonts.load('500 60px "Atma"'),document.fonts.load('600 40px "Hind Siliguri"')]).catch(()=>{});}
+function lines(x,t,maxW){const w=String(t).split(/\s+/);let l="",out=[];for(const p of w){const s=l?l+" "+p:p;if(x.measureText(s).width>maxW&&l){out.push(l);l=p;}else l=s;}if(l)out.push(l);return out;}
+function clampLines(x,t,maxW,n){const L=lines(x,t,maxW);if(L.length<=n)return L;const o=L.slice(0,n);let last=o[n-1];while(last.length>1&&x.measureText(last+"…").width>maxW)last=last.slice(0,-1);o[n-1]=last+"…";return o;}
+function fit(x,t,maxW,size,weight,fam,min){let s=size;do{x.font=`${weight} ${s}px ${fam}`;if(x.measureText(t).width<=maxW)break;s-=4;}while(s>min);return s;}
+function arch(x,px,py,pw,ph){const r=pw/2;x.beginPath();x.moveTo(px,py+ph);x.lineTo(px,py+r);x.arc(px+r,py+r,r,Math.PI,0);x.lineTo(px+pw,py+ph);x.closePath();}
+const AT='"Atma","Hind Siliguri",sans-serif',HS='"Hind Siliguri",sans-serif';
+function drawPhoto(x,shape,px,py,pw,ph,T){
+  const photo=CS.photo;PBOX={px,py,pw,ph};
+  x.save();if(shape==="circle"){x.beginPath();x.arc(px+pw/2,py+ph/2,pw/2,0,Math.PI*2);}else arch(x,px,py,pw,ph);x.clip();
+  const s=Math.max(pw/photo.width,ph/photo.height)*CS.zoom,iw=photo.width*s,ih=photo.height*s;
+  const mx=(iw-pw)/2,my=(ih-ph)/2;CS.ox=Math.max(-mx,Math.min(mx,CS.ox));CS.oy=Math.max(-my,Math.min(my,CS.oy));
+  x.drawImage(photo,px+(pw-iw)/2+CS.ox,py+(ph-ih)/2+CS.oy,iw,ih);x.restore();
+  x.lineWidth=12;x.strokeStyle=T.acc;
+  if(shape==="circle"){x.beginPath();x.arc(px+pw/2,py+ph/2,pw/2,0,Math.PI*2);x.stroke();}else{arch(x,px,py,pw,ph);x.stroke();}
+}
+function scoreBadge(x,cx,cy,r,T){
+  x.save();x.translate(cx,cy);x.rotate(8*Math.PI/180);
+  x.fillStyle=T.acc;x.beginPath();x.arc(0,0,r,0,Math.PI*2);x.fill();
+  x.fillStyle=T.acc===C.yellow?C.plum:C.cream;x.textAlign="center";x.font=`700 ${Math.round(r*.95)}px ${AT}`;x.fillText(bn(A.score),0,r*.2);
+  x.font=`600 ${Math.round(r*.27)}px ${HS}`;x.fillText("/ ১০",0,r*.62);x.restore();
+}
+function drawCard(c){
+  const H=(CS.layout==="qa"&&CS.fmt==="post")?1350:1920;if(c.height!==H)c.height=H;
+  const x=c.getContext("2d");x.setTransform(1,0,0,1,0,0);x.textBaseline="alphabetic";x.textAlign="left";
+  PBOX=null;OVER=false;
+  const T=TC[CS.theme];x.fillStyle=T.bg;x.fillRect(0,0,1080,H);
+  if(CS.layout==="qa")drawQA(x,T,H);else drawPoster(x,T,H);
+}
+const onAcc=T=>T.acc===C.yellow?C.plum:C.cream;
+const panelCol=T=>T.bg===C.cream?"rgba(46,18,57,.06)":"rgba(255,255,255,.09)";
+function header(x,T,o){
+  x.textAlign="left";x.fillStyle=T.fg;x.font=`700 ${o.rf}px ${AT}`;x.fillText("Year Recap",o.px,o.ry);
+  x.font=`700 ${o.df}px ${AT}`;let gx=o.px-6;
+  ["২","০","২","৬"].forEach((d,k)=>{x.fillStyle=T.year[k];x.fillText(d,gx,o.dy);gx+=x.measureText(d).width-4;});
+  return gx;
+}
+
+/* ---- layout 1: question & answer ---- */
+function drawQA(x,T,H){
+  const W=1080,L=70,IL=L,IR=W-L;
+  header(x,T,{px:L,rf:84,ry:150,df:236,dy:380});
+  const hasP=!!CS.photo;
+  if(hasP){drawPhoto(x,"circle",W-70-330,64,330,330,T);if(CS.showScore)scoreBadge(x,W-92,340,74,T);}
+  else if(CS.showScore)scoreBadge(x,W-190,220,120,T);
+  let y=425;
+  if(CS.name.trim()){
+    x.fillStyle=T.fg;const s=fit(x,CS.name.trim(),hasP?600:W-140,58,700,AT,34);x.font=`700 ${s}px ${AT}`;
+    const nw=x.measureText(CS.name.trim()).width;x.fillText(CS.name.trim(),L,y+54);
+    x.fillStyle=T.acc;x.beginPath();x.roundRect(L,y+76,Math.min(nw,160),8,4);x.fill();
+    y+=100;
+  }
+  y+=40;
+  const items=CS.qa.filter(q=>q.on&&q.a.trim());
+  const bottom=H-90;
+  if(!items.length)return;
+  const favs=items.filter(q=>FAVK.includes(q.k));
+  let sc=1.32,lay=null;
+  for(;sc>=.56;sc-=.04){lay=measure(x,favs,sc,IR-IL);if(y+lay.h<=bottom)break;}
+  if(y+lay.h>bottom)OVER=true;
+  const qs=Math.round(34*sc),as=Math.round(50*sc),lh=Math.round(as*1.32),gap=Math.round(44*sc),pillH=Math.round(qs*1.75);
+  let k=0;
+  for(const it of lay.rows){
+    if(y>=bottom)break;
+    if(it.fav){
+      const n=it.items.length,cw=(IR-IL-(n-1)*22)/n;
+      it.items.forEach((f,j)=>{const cx=IL+j*(cw+22),col=T.bands[(k+j)%3];
+        x.fillStyle=col[0];x.beginPath();x.roundRect(cx,y,cw,it.h,26);x.fill();
+        x.fillStyle=col[1];x.font=`600 ${qs}px ${HS}`;x.globalAlpha=.9;x.fillText(clampLines(x,f.e+" "+f.q,cw-44,1)[0],cx+22,y+qs+20);x.globalAlpha=1;
+        x.font=`700 ${as}px ${AT}`;f.ls.forEach((l,m)=>x.fillText(l,cx+22,y+qs+30+lh*(m+1)-lh*.25));});
+      y+=it.h+gap;k+=n;
+    }else{
+      const col=T.bands[k%3];x.font=`600 ${qs}px ${HS}`;const lbl=it.e+" "+it.q,pw=x.measureText(lbl).width+qs*1.4;
+      x.fillStyle=col[0];x.beginPath();x.roundRect(IL,y,pw,pillH,pillH/2);x.fill();
+      x.fillStyle=col[1];x.fillText(lbl,IL+qs*.7,y+pillH*.66);
+      y+=pillH+Math.round(14*sc);x.fillStyle=T.fg;x.font=`500 ${as}px ${AT}`;
+      for(const l of it.ls){if(y+lh>bottom+20){OVER=true;break;}x.fillText(l,IL+qs*.7,y+lh*.78);y+=lh;}
+      y+=gap;k++;
+    }
+  }
+}
+function measure(x,favs,sc,width){
+  const qs=Math.round(34*sc),as=Math.round(50*sc),lh=Math.round(as*1.32),gap=Math.round(44*sc),pillH=Math.round(qs*1.75);
+  const maxL=sc>.72?3:2;let h=0;const rows=[];let favDone=false;
+  for(const q of CS.qa.filter(q=>q.on&&q.a.trim())){
+    if(FAVK.includes(q.k)){if(favDone)continue;favDone=true;
+      const n=favs.length,cw=(width-(n-1)*22)/n;x.font=`700 ${as}px ${AT}`;
+      const its=favs.map(f=>({...f,ls:clampLines(x,f.a.trim(),cw-44,2)}));
+      const bh=qs+30+lh*Math.max(...its.map(i=>i.ls.length))+20;rows.push({fav:true,items:its,h:bh});h+=bh+gap;continue;}
+    x.font=`500 ${as}px ${AT}`;const ls=clampLines(x,q.a.trim(),width-qs*.7-8,maxL);
+    rows.push({...q,ls});h+=pillH+Math.round(14*sc)+ls.length*lh+gap;
+  }
+  return{rows,h:h-gap};
+}
+
+/* ---- layout 2: poster ---- */
+function drawPoster(x,T,H){
+  const W=1080;
+  header(x,T,{px:70,rf:76,ry:140,df:300,dy:420});
+  let y=460;const photo=CS.photo;
+  const words=CS.showWords?CS.words.map(s=>s.trim()).filter(Boolean).slice(0,3):[];
+  x.font=`500 54px ${AT}`;
+  const ql=(CS.showQuote&&CS.quote.trim())?clampLines(x,"“"+CS.quote.trim()+"”",W-150,photo?2:3):[];
+  const aw=CS.showAward&&R.awards&&R.awards[CS.award];
+  const bandH=photo?118:150,wordsH=words.length?words.length*(bandH+16)+40:0,quoteH=ql.length?ql.length*72+50:0,awardH=aw?150:0;
+  if(photo){
+    let ph=H-80-y-wordsH-quoteH-awardH-70;ph=Math.max(340,Math.min(720,ph));const pw=Math.min(720,ph*.85),px=(W-pw)/2,py=y+10;
+    drawPhoto(x,"arch",px,py,pw,ph,T);
+    if(CS.name.trim()){x.save();x.translate(W/2,py+ph);x.rotate(-3*Math.PI/180);
+      const fs=fit(x,CS.name.trim(),W-260,72,700,AT,40);x.font=`700 ${fs}px ${AT}`;const tw=x.measureText(CS.name.trim()).width+80;
+      x.fillStyle=T.pill;x.beginPath();x.roundRect(-tw/2,-58,tw,116,58);x.fill();x.fillStyle=T.pillFg;x.textAlign="center";x.fillText(CS.name.trim(),0,fs*.36);x.restore();}
+    if(CS.showScore)scoreBadge(x,px+pw-20,py+70,110,T);
+    y=py+ph+(CS.name.trim()?90:50);
+  }else{
+    x.fillStyle=T.fg;
+    if(CS.name.trim()){const ns=fit(x,CS.name.trim(),W-140,90,700,AT,44);x.font=`700 ${ns}px ${AT}`;x.fillText(CS.name.trim(),70,y+90);y+=140;}
+    if(CS.showScore){y+=170;x.fillStyle=T.acc;x.font=`700 190px ${AT}`;const sc=bn(A.score);x.fillText(sc,66,y);
+      const sw=x.measureText(sc).width;x.fillStyle=T.fg;x.font=`500 64px ${AT}`;x.fillText("/ ১০",66+sw+16,y);y+=40;}
+  }
+  if(words.length){y+=20;words.forEach((w,k)=>{x.save();x.translate(W/2,y+bandH/2);x.rotate((k%2?2:-2)*Math.PI/180);
+    x.fillStyle=T.bands[k][0];x.fillRect(-W/2-40,-bandH/2,W+80,bandH);x.fillStyle=T.bands[k][1];x.textAlign="center";
+    const s=fit(x,w,W-180,bandH*.68,700,AT,44);x.font=`700 ${s}px ${AT}`;x.fillText(w,0,s*.36);x.restore();y+=bandH+16;});y+=24;}
+  if(ql.length){y+=50;x.fillStyle=T.fg;x.font=`500 54px ${AT}`;x.textAlign="left";ql.forEach((l,k)=>x.fillText(l,70,y+k*72));y+=ql.length*72;}
+  if(aw){y+=40;x.textAlign="left";x.fillStyle=T.acc;const s=fit(x,"🏆 "+aw.name,W-140,50,700,AT,32);x.font=`700 ${s}px ${AT}`;x.fillText("🏆 "+aw.name,70,y+30);
+    x.fillStyle=T.fg;x.globalAlpha=.85;x.font=`500 34px ${HS}`;x.fillText(clampLines(x,aw.reason||"",W-150,1)[0]||"",72,y+82);x.globalAlpha=1;}
+}
+
+/* ---------- editor ---------- */
+let raf=0;const redraw=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{drawCard($("pv"));$("fitMsg").textContent=(CS.layout==="qa"&&OVER)?"সব লেখা কার্ডে আঁটছে না। কয়েকটার টিক তুলে দাও বা উত্তর ছোট করো।":"";});};
+const TOG=[["showScore","নম্বর"],["showWords","তিন শব্দ"],["showQuote","তোমার কথা"],["showAward","অ্যাওয়ার্ড"]];
+function openEditor(){
+  show("edit");
+  $("eName").value=CS.name;CS.words.forEach((w,k)=>$("eW"+k).value=w);$("eQuote").value=CS.quote;
+  renderLayoutUI();
+  $("sw").innerHTML=Object.entries(TC).map(([k,v])=>`<button type="button" data-t="${k}" aria-pressed="${CS.theme===k}" aria-label="${v.n}" style="background:${v.bg}"><span>${v.n}</span></button>`).join("");
+  $("sw").querySelectorAll("button").forEach(b=>b.onclick=()=>{CS.theme=b.dataset.t;$("sw").querySelectorAll("button").forEach(z=>z.setAttribute("aria-pressed",z===b));redraw();});
+  const aws=R.awards||[];
+  $("toggles").innerHTML=TOG.filter(([k])=>(k!=="showAward"||aws.length)&&(CS.layout==="poster"||k==="showScore")).map(([k,l])=>`<button type="button" class="pick" data-k="${k}" aria-pressed="${CS[k]}">${l}</button>`).join("");
+  $("toggles").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{const k=b.dataset.k;CS[k]=!CS[k];b.setAttribute("aria-pressed",CS[k]);$("awardPick").hidden=!CS.showAward;redraw();});
+  $("eAward").innerHTML=aws.map((a,i)=>`<option value="${i}">${esc(a.name)}</option>`).join("");$("eAward").value=CS.award;
+  $("awardPick").hidden=!CS.showAward;
+  syncPhotoUI();$("edMsg").textContent="";
+  fontsReady.then(redraw);
+}
+$("eName").oninput=e=>{CS.name=e.target.value;redraw();};
+[0,1,2].forEach(k=>$("eW"+k).oninput=e=>{CS.words[k]=e.target.value;redraw();});
+$("eQuote").oninput=e=>{CS.quote=e.target.value;redraw();};
+$("eAward").onchange=e=>{CS.award=+e.target.value;redraw();};
+$("edBack").onclick=()=>{show("story");goSlide(S.length-1);};
+$("edSave").onclick=()=>saveCard($("pv"),"edMsg");$("edShare").onclick=()=>shareCard($("pv"),"edMsg");
+function renderLayoutUI(){
+  $("layouts").innerHTML=[["qa","প্রশ্ন-উত্তর"],["poster","পোস্টার"]].map(([k,l])=>`<button type="button" class="pick" data-l="${k}" aria-pressed="${CS.layout===k}">${l}</button>`).join("");
+  $("layouts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.layout=b.dataset.l;openEditor();});
+  $("fmtField").hidden=CS.layout!=="qa";
+  $("fmts").innerHTML=[["story","স্টোরি (৯:১৬)"],["post","ফিড পোস্ট (৪:৫)"]].map(([k,l])=>`<button type="button" class="pick" data-f="${k}" aria-pressed="${CS.fmt===k}">${l}</button>`).join("");
+  $("fmts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.fmt=b.dataset.f;if(CS.fmt==="post")autoFit();renderLayoutUI();redraw();});
+  $("posterFields").hidden=CS.layout!=="poster";$("qaFields").hidden=CS.layout!=="qa";
+  $("qaList").innerHTML=CS.qa.map((q,i)=>`<div class="qa-item${q.on?"":" off"}" data-i="${i}"><label><input type="checkbox" ${q.on?"checked":""}> ${q.e} ${q.q}</label><textarea maxlength="160" aria-label="${q.q}" placeholder="তোমার উত্তর লেখো">${esc(q.a)}</textarea></div>`).join("");
+  $("qaList").querySelectorAll(".qa-item").forEach(el=>{const q=CS.qa[+el.dataset.i];
+    el.querySelector("input").onchange=e=>{q.on=e.target.checked;el.classList.toggle("off",!q.on);redraw();};
+    el.querySelector("textarea").oninput=e=>{q.a=e.target.value;if(q.a.trim()&&!q.on){q.on=true;el.querySelector("input").checked=true;el.classList.remove("off");}redraw();};});
+}
+// in the smaller post size, drop the least important answers until everything fits
+function autoFit(){const c=document.createElement("canvas");c.width=1080;
+  const order=["hard","song","travel","person","learn","food","next","win","happy","three"];
+  drawCard(c);for(const k of order){if(!OVER)break;const q=CS.qa.find(z=>z.k===k);if(q&&q.on){q.on=false;drawCard(c);}}}
+function syncPhotoUI(){
+  const has=!!CS.photo;$("photoCtl").hidden=!has;$("dragHint").hidden=!has;$("pv").classList.toggle("dragok",has);
+  $("fileLbl").textContent=has?"📷 অন্য ছবি দাও":"📷 ছবি দাও";$("zoom").value=CS.zoom;
+}
+$("file").onchange=e=>{
+  const f=e.target.files&&e.target.files[0];if(!f)return;
+  if(!f.type.startsWith("image/")){$("edMsg").textContent="এটা ছবি না, একটা ছবি বেছে নাও।";return;}
+  const url=URL.createObjectURL(f),img=new Image();
+  img.onload=()=>{CS.photo=img;CS.zoom=1;CS.ox=0;CS.oy=0;syncPhotoUI();redraw();$("edMsg").textContent="";};
+  img.onerror=()=>{$("edMsg").textContent="ছবিটা খোলা গেল না। JPG বা PNG ছবি দাও।";};
+  img.src=url;e.target.value="";
+};
+$("zoom").oninput=e=>{CS.zoom=+e.target.value;redraw();};
+$("rmPhoto").onclick=()=>{CS.photo=null;syncPhotoUI();redraw();};
+// drag to position photo
+(()=>{const pv=$("pv");let drag=null;
+  const toCard=e=>{const r=pv.getBoundingClientRect();return[(e.clientX-r.left)*1080/r.width,(e.clientY-r.top)*pv.height/r.height];};
+  pv.addEventListener("pointerdown",e=>{if(!CS||!CS.photo||!PBOX)return;const [cx,cy]=toCard(e);
+    if(cx<PBOX.px||cx>PBOX.px+PBOX.pw||cy<PBOX.py||cy>PBOX.py+PBOX.ph)return;
+    drag={cx,cy,ox:CS.ox,oy:CS.oy};pv.setPointerCapture(e.pointerId);e.preventDefault();});
+  pv.addEventListener("pointermove",e=>{if(!drag)return;const [cx,cy]=toCard(e);CS.ox=drag.ox+(cx-drag.cx);CS.oy=drag.oy+(cy-drag.cy);redraw();});
+  ["pointerup","pointercancel"].forEach(ev=>pv.addEventListener(ev,()=>drag=null));
+})();
+
+async function cardBlob(canvas){drawCard(canvas);return new Promise(r=>canvas.toBlob(r,"image/png"));}
+async function saveCard(canvas,msgId){
+  const blob=await cardBlob(canvas);
+  try{const dl=window.claude?await claude.use("downloads"):null;
+    if(dl){await dl.save({filename:"amar-2026.png",data:blob});$(msgId).textContent="কার্ড সেভ হয়েছে 🎉";return;}}
+  catch(e){if(e&&e.code==="cancelled")return;}
+  try{const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="amar-2026.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+    $(msgId).textContent="কার্ড ডাউনলোড হয়েছে 🎉";}
+  catch(e){$(msgId).textContent="সেভ করা গেল না। কার্ডের স্ক্রিনশট নিয়ে নাও।";}
+}
+async function shareCard(canvas,msgId){
+  const blob=await cardBlob(canvas);const file=new File([blob],"amar-2026.png",{type:"image/png"});
+  if(navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:"আমার ২০২৬"});return;}catch(e){if(e&&e.name==="AbortError")return;}
+  }
+  saveCard(canvas,msgId);
+}
+async function copyText(){
+  const t=[R.title,R.opening,"তিন শব্দে: "+(R.words||[]).join(", "),`বছরের নম্বর: ${bn(A.score)}/১০`,...(R.chapters||[]).map(c=>`${c.emoji||""} ${c.heading}\n${c.text}`),"বছরের অ্যাওয়ার্ড:\n"+(R.awards||[]).map(a=>"🏆 "+a.name+": "+a.reason).join("\n"),R.closing].filter(Boolean).join("\n\n");
+  try{await navigator.clipboard.writeText(t);$("msg").textContent="লেখা কপি হয়েছে।";}catch(e){$("msg").textContent="কপি করা গেল না।";}
+}
+</script>
+</body>
+</html>
