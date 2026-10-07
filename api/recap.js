@@ -53,7 +53,7 @@ ${answerText}
 </answers>
 
 Reply with only JSON, no markdown:
-{"title":"catchy title, max 7 words","opening":"1-2 short sentences","words":["exactly 3 single words or short phrases for the year"],"scoreLine":"one playful line about their score out of 10","chapters":[{"emoji":"one emoji","heading":"max 5 words","text":"max 2 short sentences"}],"awards":[{"name":"fun award, max 5 words","reason":"max 12 words"}],"closing":"1-2 sentences about 2027","cardLine":"one quotable line, max 12 words"}
+{"title":"catchy title, max 7 words","opening":"1-2 short sentences","words":["exactly 3 single words or short phrases for the year"],"scoreLine":"one playful line about their score out of 10","chapters":[{"emoji":"one emoji","heading":"max 5 words","text":"max 2 short sentences"}],"awards":[{"name":"fun award, max 5 words","reason":"max 12 words"}],"closing":"1-2 sentences about 2027","cardLine":"one quotable line, max 12 words","notes":["3 tiny reflective handwritten-style lines, max 7 words each, drawn only from the answers"]}
 chapters: 2-4. awards: exactly 3.`;
 
   try {
@@ -91,6 +91,7 @@ chapters: 2-4. awards: exactly 3.`;
         .filter(x => x.name),
       closing: str(j.closing, 300),
       cardLine: str(j.cardLine, 120),
+      notes: (Array.isArray(j.notes) ? j.notes : []).map(n => str(n, 70)).filter(Boolean).slice(0, 3),
     };
     if (!out.title) return res.status(502).json({ error: "bad_output" });
     return res.status(200).json(out);
