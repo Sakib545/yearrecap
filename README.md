@@ -52,7 +52,7 @@ vercel --prod
 
 ## লিংক প্রিভিউ (og.png)
 
-`index.html`-এর `<head>`-এ `https://yearrecap.vercel.app` লেখা আছে। তোমার Vercel ঠিকানা অন্য হলে বা নিজের ডোমেইন লাগালে ওই দুই জায়গায় বদলে দিও।
+সাইটের ঠিকানা **https://www.recapmyyear.xyz**। `index.html`-এর `<head>`-এ এই ঠিকানাই বসানো (canonical, og:url, og:image)। ডোমেইন বদলালে ওখানে আর প্রোফাইল কার্ডের লিংক লেখায় বদলে দিও।
 
 ## Analytics
 

@@ -8,9 +8,11 @@
 <meta property="og:title" content="আমার ২০২৬ – Year Recap">
 <meta property="og:description" content="তোমার বছরের গল্প, বাংলায়। ছবি দিয়ে বানাও নিজের শেয়ার কার্ড।">
 <meta property="og:type" content="website">
-<!-- Link preview. If your Vercel address is different, change yearrecap.vercel.app below. -->
-<meta property="og:url" content="https://yearrecap.vercel.app/">
-<meta property="og:image" content="https://yearrecap.vercel.app/og.png">
+<!-- Link preview. Site address: www.recapmyyear.xyz -->
+<link rel="canonical" href="https://www.recapmyyear.xyz/">
+<meta property="og:url" content="https://www.recapmyyear.xyz/">
+<meta property="og:image" content="https://www.recapmyyear.xyz/og.png">
+<meta name="twitter:image" content="https://www.recapmyyear.xyz/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -185,6 +187,12 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
 .qa-item input[type=checkbox]{width:22px;height:22px;accent-color:var(--pink)}
 .qa-item textarea{margin-top:6px;min-height:58px!important;font-size:17px!important}
 .fitmsg{font-weight:600;color:#B0174F;margin:6px 0 0;min-height:1.2em}
+.iabar{background:var(--yellow);color:var(--plum);border-radius:14px;padding:12px 16px;font-weight:600;font-size:15px;line-height:1.45;margin:4px 0 8px}
+.iabar a,.iabar button{color:var(--plum);font-weight:800;text-decoration:underline;background:none;border:0;padding:0;font-size:15px;cursor:pointer}
+.savebox{max-width:420px;width:100%}
+.savebox img,.savebox video{display:block;width:100%;max-height:58vh;object-fit:contain;border-radius:14px;background:#000;-webkit-touch-callout:default}
+.savebox .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.capbox{background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px;font-size:14px;text-align:left;white-space:pre-line;width:100%}
 .vidov{position:fixed;inset:0;z-index:50;background:rgba(20,8,26,.9);display:flex;align-items:center;justify-content:center;color:var(--cream);padding:24px}
 .vidbox{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
 #vidCanvas{width:min(46vw,230px);height:auto;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,.5)}
@@ -233,6 +241,7 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
 <!-- intro -->
 <section class="screen" id="intro">
  <div class="hero">
+  <div class="iabar" id="iabar" hidden></div>
   <header class="hbar">
     <span class="brand">আমার গল্প<svg viewBox="0 0 120 14" aria-hidden="true"><path d="M3 11 C35 2 75 2 117 6" stroke="#FFC72C" stroke-width="3" fill="none" stroke-linecap="round"/></svg></span>
     <span class="hyr" aria-hidden="true"><b>›</b><span>২</span><span>০</span><span>২</span><span>৬</span><b>‹</b></span>
@@ -293,6 +302,17 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
   <div class="tapzones" id="tap"><div id="tprev"></div><div id="tnext"></div></div>
   <div class="slide" id="slide" aria-live="polite"></div>
 </section>
+
+<!-- save overlay: used inside Facebook/Instagram browsers where downloads don't work -->
+<div class="vidov" id="saveOv" hidden role="dialog" aria-label="সেভ করো">
+  <div class="vidbox savebox">
+    <p id="saveTitle" style="font-weight:700;font-size:20px;margin:0">ছবিটা সেভ করো</p>
+    <div id="saveMedia" style="width:100%"></div>
+    <p class="small" id="saveHelp" style="margin:0"></p>
+    <div class="capbox" id="saveCapText"></div>
+    <div class="row"><button class="ghost" id="saveCap">📋 ক্যাপশন কপি</button><button class="ghost" id="saveChrome" hidden>Chrome-এ খোলো</button><button class="cta" id="saveClose">ঠিক আছে</button></div>
+  </div>
+</div>
 
 <!-- video overlay -->
 <div class="vidov" id="vidOv" hidden role="dialog" aria-label="ভিডিও বানানো হচ্ছে">
@@ -876,7 +896,31 @@ $("rmPhoto").onclick=()=>{CS.photo=null;syncPhotoUI();redraw();};
 })();
 
 async function cardBlob(canvas){drawCard(canvas);return new Promise(r=>canvas.toBlob(r,"image/png"));}
+/* ---------- Facebook / Instagram in-app browsers + share caption ---------- */
+const SITE="recapmyyear.xyz",HASHTAGS="#আমার২০২৬ #YearRecap2026 #recapmyyear";
+const UA=navigator.userAgent||"",IN_APP=/FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger|MessengerLite|Line\/|; wv\)/i.test(UA),IS_ANDROID=/Android/i.test(UA),IS_IOS=/iPhone|iPad|iPod/i.test(UA);
+function CAPTION(){return `আমার ২০২৬ এমন গেল 🎊${A&&A.score&&(!CS||CS.showScore)?` বছরটাকে দিলাম ${bn(A.score)}/১০।`:""}\nতোমারটা বানাও 👉 ${SITE}\n${HASHTAGS}`;}
+async function copyCaption(txt){try{await navigator.clipboard.writeText(txt||CAPTION());return true;}catch(e){return false;}}
+function chromeURL(){return `intent://${location.host}${location.pathname}${location.search}${location.hash}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(location.href)};end`;}
+function openInChrome(){if(IS_ANDROID)location.href=chromeURL();}
+(()=>{if(!IN_APP||/claude/.test(location.hostname))return;const b=$("iabar");b.hidden=false;
+  b.innerHTML=IS_ANDROID?`Facebook-এর ভেতরে খুলেছ। কার্ড আর ভিডিও ঠিকমতো সেভ আর শেয়ার করতে <button id="iaOpen">Chrome-এ খোলো</button>, তারপর বানাও।`
+    :`Facebook-এর ভেতরে খুলেছ। কার্ড আর ভিডিও ঠিকমতো সেভ করতে উপরের <b>⋯</b> চেপে <b>"Open in Safari / ব্রাউজারে খোলো"</b> বাছো, তারপর বানাও।`;
+  const o=$("iaOpen");if(o)o.onclick=()=>{track("open_in_chrome");openInChrome();};track("in_app_open");})();
+function showSaveOverlay(blob,isVideo){
+  const ov=$("saveOv"),m=$("saveMedia");$("saveTitle").textContent=isVideo?"ভিডিওটা সেভ করো":"ছবিটা সেভ করো";
+  $("saveCapText").textContent=CAPTION();
+  if(isVideo){const u=URL.createObjectURL(blob);m.innerHTML=`<video src="${u}" controls playsinline loop></video>`;
+    $("saveHelp").textContent=IN_APP?"Facebook-এর ভেতর থেকে ভিডিও সেভ হয় না। "+(IS_ANDROID?"নিচে \"Chrome-এ খোলো\" চাপো, তারপর আবার ভিডিও বানাও।":"উপরের ⋯ থেকে Safari-তে খুলে আবার ভিডিও বানাও।"):"ভিডিওতে চেপে ধরে বা ⋮ মেনু থেকে ডাউনলোড করো।";}
+  else{const fr=new FileReader();fr.onload=()=>{m.innerHTML=`<img src="${fr.result}" alt="তোমার কার্ড">`;};fr.readAsDataURL(blob);
+    $("saveHelp").textContent="ছবির ওপর আঙুল চেপে ধরো, তারপর \"Save image / ছবি সেভ করো\" চাপো। না হলে স্ক্রিনশট নিয়ে নাও।";}
+  $("saveChrome").hidden=!(IN_APP&&IS_ANDROID);$("saveChrome").onclick=openInChrome;
+  $("saveCap").onclick=async()=>{const ok=await copyCaption();$("saveCap").textContent=ok?"✓ কপি হয়েছে":"কপি হলো না";};
+  $("saveClose").onclick=()=>{ov.hidden=true;m.innerHTML="";$("saveCap").textContent="📋 ক্যাপশন কপি";};
+  ov.hidden=false;track("save_overlay",{video:!!isVideo,inApp:IN_APP});
+}
 async function saveBlob(blob,name,msgId){
+  if(IN_APP&&!window.claude){showSaveOverlay(blob,/\.(mp4|webm)$/.test(name));return;}
   try{const dl=window.claude?await claude.use("downloads"):null;
     if(dl){await dl.save({filename:name,data:blob});$(msgId).textContent="সেভ হয়েছে 🎉";return;}}
   catch(e){if(e&&e.code==="cancelled")return;}
@@ -888,10 +932,11 @@ async function saveCard(canvas,msgId){track("card_saved",{layout:CS.layout,theme
 async function shareCard(canvas,msgId){
   track("card_shared",{layout:CS.layout,theme:CS.theme,font:CS.font});
   const blob=await cardBlob(canvas);const file=new File([blob],"amar-2026.png",{type:"image/png"});
-  if(navigator.canShare&&navigator.canShare({files:[file]})){
-    try{await navigator.share({files:[file],title:"আমার ২০২৬"});return;}catch(e){if(e&&e.name==="AbortError")return;}
+  const copied=await copyCaption();
+  if(!IN_APP&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{await navigator.share({files:[file],title:"আমার ২০২৬",text:CAPTION()});$(msgId).textContent=copied?"ক্যাপশন আর হ্যাশট্যাগ কপি হয়েছে, পোস্টে পেস্ট করে দাও ✨":"";return;}catch(e){if(e&&e.name==="AbortError")return;}
   }
-  saveCard(canvas,msgId);
+  await saveCard(canvas,msgId);if(copied&&!IN_APP)$(msgId).textContent+=" ক্যাপশন আর হ্যাশট্যাগও কপি হয়েছে, পোস্টে পেস্ট করো।";
 }
 async function copyText(){
   const t=[R.title,R.opening,"তিন শব্দে: "+(R.words||[]).join(", "),`বছরের নম্বর: ${bn(A.score)}/১০`,...(R.chapters||[]).map(c=>`${c.emoji||""} ${c.heading}\n${c.text}`),"বছরের অ্যাওয়ার্ড:\n"+(R.awards||[]).map(a=>"🏆 "+a.name+": "+a.reason).join("\n"),R.closing].filter(Boolean).join("\n\n");
@@ -1022,8 +1067,8 @@ async function makeVideo(msgId){
   if(cancelled||!chunks.length){$(msgId).textContent=cancelled?"":"ভিডিও বানানো গেল না।";return;}
   const type=(rec.mimeType||mime||"video/webm").split(";")[0],ext=type.includes("mp4")?"mp4":"webm";
   const blob=new Blob(chunks,{type}),name="amar-2026."+ext,file=new File([blob],name,{type});
-  track("video_made",{ext});
-  if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:"আমার ২০২৬"});return;}catch(e){if(e&&e.name==="AbortError")return;}}
+  track("video_made",{ext});const copied=await copyCaption();
+  if(!IN_APP&&navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:"আমার ২০২৬",text:CAPTION()});$(msgId).textContent=copied?"ক্যাপশন আর হ্যাশট্যাগ কপি হয়েছে, পোস্টে পেস্ট করে দাও ✨":"";return;}catch(e){if(e&&e.name==="AbortError")return;}}
   await saveBlob(blob,name,msgId);
   if(ext==="webm")$(msgId).textContent+=" (webm ফাইল। Instagram-এ না চললে CapCut-এ খুলে mp4 করে নাও।)";
 }
@@ -1046,8 +1091,9 @@ async function shareLink(msgId){
   const data={v:1,n:A.name,s:A.score,th:CS.theme,f:CS.font,R:cleanR(R)};
   const url=location.href.split("#")[0]+"#r="+await pack(data);
   track("link_shared");
-  if(navigator.share){try{await navigator.share({title:`${A.name}-এর ২০২৬`,url});return;}catch(e){if(e&&e.name==="AbortError")return;}}
-  try{await navigator.clipboard.writeText(url);$(msgId).textContent="লিংক কপি হয়েছে। লিংকে গল্পের লেখা থাকে, ছবি না।";}
+  const txt=`আমার ২০২৬-এর গল্পটা দেখো 👀\n${url}\n\nতুমিও বানাও 👉 ${SITE}\n${HASHTAGS}`;
+  if(navigator.share&&!IN_APP){try{await navigator.share({title:`${A.name}-এর ২০২৬`,text:`আমার ২০২৬-এর গল্পটা দেখো 👀 ${HASHTAGS}`,url});return;}catch(e){if(e&&e.name==="AbortError")return;}}
+  try{await navigator.clipboard.writeText(txt);$(msgId).textContent="লিংক আর হ্যাশট্যাগ কপি হয়েছে, যেখানে খুশি পেস্ট করো। লিংকে গল্পের লেখা থাকে, ছবি না।";}
   catch(e){$(msgId).textContent="লিংক কপি করা গেল না।";}
 }
 function goMine(){history.replaceState(null,"",location.pathname+location.search);location.reload();}
@@ -1982,7 +2028,7 @@ function drawProfile(x,T,H){
   const ws=CS.showWords?CS.words.map(w=>w.trim()).filter(Boolean):[];x.font=`500 34px ${HS}`;
   if(ws.length){x.fillText(clampLines(x,ws.join(" • "),980,1)[0],50,y);y+=46;}
   if(CS.showQuote&&CS.quote.trim()){x.fillText(clampLines(x,CS.quote.trim(),980,1)[0],50,y);y+=46;}
-  x.fillStyle="#00376B";x.fillText("🔗 yearrecap.vercel.app",50,y);y+=40;
+  x.fillStyle="#00376B";x.fillText("🔗 recapmyyear.xyz",50,y);y+=40;
   x.fillStyle=T.acc;x.beginPath();x.roundRect(50,y,480,78,16);x.fill();x.fillStyle=onAcc(T);x.textAlign="center";x.font=`700 34px ${HS}`;x.fillText("অনুসরণ করো",290,y+51);
   x.fillStyle="#EFEFEF";x.beginPath();x.roundRect(550,y,480,78,16);x.fill();x.fillStyle=INK;x.fillText("মেসেজ",790,y+51);x.textAlign="left";y+=120;
   const its=pickItems(9),HL={happy:"খুশি",win:"অর্জন",learn:"শেখা",travel:"ভ্রমণ",person:"মানুষ",food:"খাবার",song:"গান",next:"২০২৭",three:"বছর",hard:"লড়াই"};
