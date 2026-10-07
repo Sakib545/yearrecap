@@ -146,11 +146,11 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
 .filebtn{display:inline-flex;align-items:center;cursor:pointer;font-size:18px;padding:12px 26px;min-height:52px}
 .ctrls input[type=range]{accent-color:var(--pink)}
 .prow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
-.sw{display:flex;gap:12px;flex-wrap:wrap}
+.sw{display:flex;gap:14px 16px;flex-wrap:wrap}
 .sw button{width:52px;height:52px;border-radius:50%;cursor:pointer;border:3px solid rgba(46,18,57,.2);position:relative}
 .sw button[aria-pressed="true"]{border-color:var(--plum);box-shadow:0 0 0 3px var(--cream),0 0 0 6px var(--plum)}
 .sw button span{position:absolute;inset:auto 0 -24px;font-size:13px;font-weight:600;white-space:nowrap}
-.sw{padding-bottom:22px}
+.sw{padding-bottom:22px;row-gap:34px}
 #edit .pick[aria-pressed="true"]{background:var(--plum);color:var(--cream)}
 .qa{display:flex;flex-direction:column;gap:12px}
 .qa-item{background:#fff;border:2px solid rgba(46,18,57,.15);border-radius:14px;padding:10px 12px}
@@ -240,6 +240,7 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
      <fieldset><legend>ডিজাইন</legend><div class="picks" id="layouts" style="margin-top:0"></div></fieldset>
      <fieldset id="fmtField"><legend>সাইজ</legend><div class="picks" id="fmts" style="margin-top:0"></div></fieldset>
      <fieldset><legend>ফন্ট</legend><div class="picks" id="fontPicks" style="margin-top:0"></div></fieldset>
+     <fieldset id="sfField"><legend>রেটিং-এর ফন্ট</legend><div class="picks" id="sfPicks" style="margin-top:0"></div></fieldset>
      <fieldset><legend>রং</legend><div class="sw" id="sw"></div></fieldset>
      <fieldset><legend>লেখা</legend>
        <label class="lbl" for="eName">নাম</label><input type="text" id="eName" maxlength="40">
@@ -446,6 +447,14 @@ const TC={
  pink:{n:"গোলাপি",bg:C.pink,fg:C.cream,acc:C.yellow,pill:C.plum,pillFg:C.yellow,foot:C.plum,footFg:C.yellow,year:[C.cream,C.yellow,C.cream,C.yellow],bands:[[C.plum,C.cream],[C.yellow,C.plum],[C.blue,C.cream]]},
  cream:{n:"ক্রিম",bg:C.cream,fg:C.plum,acc:C.pink,pill:C.blue,pillFg:C.cream,foot:C.green,footFg:C.cream,year:[C.pink,C.orange,C.green,C.blue],bands:[[C.orange,C.cream],[C.green,C.cream],[C.blue,C.cream]]},
  green:{n:"সবুজ",bg:C.green,fg:C.cream,acc:C.yellow,pill:C.pink,pillFg:C.cream,foot:C.yellow,footFg:C.plum,year:[C.yellow,C.cream,C.yellow,C.cream],bands:[[C.pink,C.cream],[C.yellow,C.plum],[C.plum,C.cream]]},
+ blue:{n:"নীল",bg:C.blue,fg:C.cream,acc:C.yellow,pill:C.pink,pillFg:C.cream,year:[C.yellow,C.cream,"#FF8FB8",C.cream],bands:[[C.yellow,C.plum],[C.pink,C.cream],[C.cream,C.blue]]},
+ orange:{n:"কমলা",bg:C.orange,fg:C.cream,acc:C.plum,pill:C.plum,pillFg:C.yellow,year:[C.cream,C.plum,C.cream,C.plum],bands:[[C.plum,C.cream],[C.yellow,C.plum],[C.cream,"#B8460B"]]},
+ yellow:{n:"হলুদ",bg:C.yellow,fg:C.plum,acc:C.pink,pill:C.plum,pillFg:C.yellow,year:[C.pink,C.plum,C.green,C.blue],bands:[[C.plum,C.yellow],[C.pink,C.cream],[C.green,C.cream]]},
+ night:{n:"রাত",bg:"#12141F",fg:"#F3F0E8",acc:"#FF8A3D",pill:"#7CC4FF",pillFg:"#12141F",year:["#7CC4FF","#FF8A3D","#FFD166","#FF5C8D"],bands:[["#3B5BDB","#F3F0E8"],["#FF8A3D","#12141F"],["#FF5C8D","#F3F0E8"]]},
+ maroon:{n:"মেরুন",bg:"#6E1A28",fg:"#FBEFD9",acc:C.yellow,pill:"#FBEFD9",pillFg:"#6E1A28",year:[C.yellow,"#FBEFD9",C.yellow,"#FBEFD9"],bands:[[C.yellow,"#6E1A28"],["#FBEFD9","#6E1A28"],["#E8367C","#FBEFD9"]]},
+ sky:{n:"আকাশি",bg:"#BFE6F5",fg:"#12305A",acc:C.pink,pill:"#12305A",pillFg:C.cream,year:[C.blue,C.pink,C.orange,C.green],bands:[[C.blue,C.cream],[C.pink,C.cream],[C.yellow,"#12305A"]]},
+ lavender:{n:"ল্যাভেন্ডার",bg:"#E6DDF7",fg:C.plum,acc:"#7B3FE4",pill:C.plum,pillFg:C.cream,year:["#7B3FE4",C.pink,C.orange,C.green],bands:[["#7B3FE4",C.cream],[C.pink,C.cream],[C.plum,"#E6DDF7"]]},
+ mint:{n:"পুদিনা",bg:"#D7F2E3",fg:"#0E3B2A",acc:C.orange,pill:C.green,pillFg:C.cream,year:[C.green,C.orange,C.blue,C.pink],bands:[[C.green,C.cream],[C.orange,C.cream],[C.blue,C.cream]]},
 };
 let CS=null, fontsReady=Promise.resolve(), PBOX=null, OVER=false;
 const QAF=[["three","✍️","বছরটা তিন শব্দে"],["happy","🌟","সবচেয়ে খুশির মুহূর্ত"],["hard","🌧️","কঠিন সময় পার করলাম যেভাবে"],["learn","🧠","নতুন যা শিখলাম"],["travel","🧳","যেখানে ঘুরলাম"],["food","🍛","প্রিয় খাবার"],["song","🎵","প্রিয় গান/সিনেমা"],["person","❤️","পাশে ছিল যে"],["win","🏆","সবচেয়ে বড় অর্জন"],["next","🚀","২০২৭-এ চাই"]];
@@ -453,7 +462,7 @@ const FAVK=["food","song","person"];
 function initCS(){
   const w=(R.words||[]).slice(0,3);while(w.length<3)w.push("");
   const threeAns=(A.three||"").trim()||w.filter(Boolean).join(", ");
-  CS={layout:"qa",fmt:"story",font:"modern",name:A.name||"",words:w,quote:R.cardLine||"",showScore:true,showWords:true,showQuote:true,showAward:false,award:0,theme:"plum",photo:null,zoom:1,ox:0,oy:0,
+  CS={layout:"qa",fmt:"story",font:"modern",scoreFont:"auto",name:A.name||"",words:w,quote:R.cardLine||"",showScore:true,showWords:true,showQuote:true,showAward:false,award:0,theme:"plum",photo:null,zoom:1,ox:0,oy:0,
     qa:QAF.map(([k,e,q])=>{const a=k==="three"?threeAns:(A[k]||"");return{k,e,q,a,on:!!a&&k!=="hard"};})};
 }
 function loadFonts(){return Promise.all([FONTS_LOADED,document.fonts.load('500 40px "Hind Siliguri"'),document.fonts.load('600 40px "Hind Siliguri"'),document.fonts.load('700 40px "Hind Siliguri"')]).catch(()=>{});}
@@ -481,7 +490,7 @@ function drawPhoto(x,shape,px,py,pw,ph,T){
 function scoreBadge(x,cx,cy,r,T){
   x.save();x.translate(cx,cy);x.rotate(8*Math.PI/180);
   x.fillStyle=T.acc;x.beginPath();x.arc(0,0,r,0,Math.PI*2);x.fill();
-  x.fillStyle=T.acc===C.yellow?C.plum:C.cream;x.textAlign="center";x.font=`700 ${Math.round(r*.95)}px ${AT}`;x.fillText(bn(A.score),0,r*.2);
+  x.fillStyle=T.acc===C.yellow?C.plum:C.cream;x.textAlign="center";const SF=(CS.scoreFont&&FONTS[CS.scoreFont])?FONTS[CS.scoreFont].d:AT;x.font=`700 ${Math.round(r*.95)}px ${SF}`;x.fillText(bn(A.score),0,r*.2);
   x.font=`600 ${Math.round(r*.27)}px ${HS}`;x.fillText("/ ১০",0,r*.62);x.restore();
 }
 function drawCard(c){
@@ -600,11 +609,11 @@ function openEditor(){
   show("edit");
   $("eName").value=CS.name;CS.words.forEach((w,k)=>$("eW"+k).value=w);$("eQuote").value=CS.quote;
   renderLayoutUI();
-  $("sw").innerHTML=Object.entries(TC).map(([k,v])=>`<button type="button" data-t="${k}" aria-pressed="${CS.theme===k}" aria-label="${v.n}" style="background:${v.bg}"><span>${v.n}</span></button>`).join("");
+  $("sw").innerHTML=Object.entries(TC).map(([k,v])=>`<button type="button" data-t="${k}" aria-pressed="${CS.theme===k}" aria-label="${v.n}" style="background:linear-gradient(135deg,${v.bg} 0 58%,${v.acc} 58% 78%,${v.bands[0][0]} 78%)"><span>${v.n}</span></button>`).join("");
   $("sw").querySelectorAll("button").forEach(b=>b.onclick=()=>{CS.theme=b.dataset.t;$("sw").querySelectorAll("button").forEach(z=>z.setAttribute("aria-pressed",z===b));redraw();});
   const aws=R.awards||[];
   $("toggles").innerHTML=TOG.filter(([k])=>(k!=="showAward"||aws.length)&&(CS.layout==="poster"||k==="showScore")).map(([k,l])=>`<button type="button" class="pick" data-k="${k}" aria-pressed="${CS[k]}">${l}</button>`).join("");
-  $("toggles").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{const k=b.dataset.k;CS[k]=!CS[k];b.setAttribute("aria-pressed",CS[k]);$("awardPick").hidden=!CS.showAward;redraw();});
+  $("toggles").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{const k=b.dataset.k;CS[k]=!CS[k];b.setAttribute("aria-pressed",CS[k]);$("awardPick").hidden=!CS.showAward;$("sfField").hidden=!CS.showScore;redraw();});
   $("eAward").innerHTML=aws.map((a,i)=>`<option value="${i}">${esc(a.name)}</option>`).join("");$("eAward").value=CS.award;
   $("awardPick").hidden=!CS.showAward;
   syncPhotoUI();$("edMsg").textContent="";
@@ -624,6 +633,9 @@ function renderLayoutUI(){
     FONTS_LOADED.then(()=>{const F=FONTS[CS.font];const miss=Object.keys(FONT_FILES).filter(f=>(F.d+F.a).includes(f)&&!FONT_OK[f]);
       $("edMsg").textContent=miss.length?`"${miss.join(", ")}" ফন্ট লোড হয়নি। fonts ফোল্ডারে ফাইলটা আছে কিনা দেখো।`:"";
       if(CS.fmt==="post")autoFit();redraw();});});
+  $("sfField").hidden=!CS.showScore;
+  $("sfPicks").innerHTML=[["auto",{n:"কার্ডের মতো",d:"inherit"}],...Object.entries(FONTS)].map(([k,v])=>`<button type="button" class="pick" data-s="${k}" aria-pressed="${CS.scoreFont===k}" style="font-family:${v.d.replace(/"/g,"'")};font-size:19px">${k==="auto"?v.n:bn(A.score)+" "+v.n}</button>`).join("");
+  $("sfPicks").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.scoreFont=b.dataset.s;$("sfPicks").querySelectorAll(".pick").forEach(z=>z.setAttribute("aria-pressed",z===b));FONTS_LOADED.then(redraw);});
   $("fmtField").hidden=CS.layout!=="qa";
   $("fmts").innerHTML=[["story","স্টোরি (৯:১৬)"],["post","ফিড পোস্ট (৪:৫)"]].map(([k,l])=>`<button type="button" class="pick" data-f="${k}" aria-pressed="${CS.fmt===k}">${l}</button>`).join("");
   $("fmts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.fmt=b.dataset.f;if(CS.fmt==="post")autoFit();renderLayoutUI();redraw();});
