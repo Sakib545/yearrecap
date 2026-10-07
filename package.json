@@ -2,8 +2,5 @@
   "name": "amar-2026",
   "version": "1.0.0",
   "private": true,
-  "description": "আমার ২০২৬ – Bangla year recap with shareable card",
-  "dependencies": {
-    "@vercel/analytics": "^2.0.1"
-  }
+  "description": "আমার ২০২৬ – Bangla year recap with shareable card"
 }
