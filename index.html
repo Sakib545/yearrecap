@@ -11,7 +11,8 @@
 <meta name="theme-color" content="#2E1239">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atma:wght@500;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 :root{
   box-sizing:border-box;
@@ -20,7 +21,7 @@
   --plum:#2E1239; --pink:#E8367C; --orange:#F26B1D; --yellow:#FFC72C;
   --green:#14855A; --blue:#2847B8; --cream:#FFF4E2; --ink:#2E1239;
   --bg:var(--plum); --fg:var(--cream);
-  --display:"Atma","Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
+  --display:"Li Ador Noirrit","Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
   --body:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;
 }
 /* the experience is full-colour by design; dark/light both use the same slide palette */
@@ -180,6 +181,7 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
     <button class="cta" id="start">শুরু করি</button>
     <p class="small" id="resume" hidden></p>
     <p class="small">৩ মিনিট লাগবে। উত্তরগুলো শুধু তোমার গল্প লেখার কাজে লাগে, কোথাও জমা রাখা হয় না।</p>
+    <p class="small" style="font-size:13px;opacity:.55">ফন্ট: লি আদর নৈঋত ও লি হকের উড়োচিঠি (লিপিঘর ফন্ট ফাউন্ড্রি), অখণ্ড বেঙ্গলি, ঢাকা টাইপ, অক্ষর, কালপুরুষ, হিন্দ শিলিগুড়ি</p>
   </div>
 </section>
 
@@ -237,6 +239,7 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
      </fieldset>
      <fieldset><legend>ডিজাইন</legend><div class="picks" id="layouts" style="margin-top:0"></div></fieldset>
      <fieldset id="fmtField"><legend>সাইজ</legend><div class="picks" id="fmts" style="margin-top:0"></div></fieldset>
+     <fieldset><legend>ফন্ট</legend><div class="picks" id="fontPicks" style="margin-top:0"></div></fieldset>
      <fieldset><legend>রং</legend><div class="sw" id="sw"></div></fieldset>
      <fieldset><legend>লেখা</legend>
        <label class="lbl" for="eName">নাম</label><input type="text" id="eName" maxlength="40">
@@ -264,6 +267,20 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
 
 <script>
 const $=id=>document.getElementById(id);
+
+/* ---------- custom fonts: loaded as bytes with the FontFace API ---------- */
+const FONT_FILES={"Li Ador Noirrit":"LiAdorNoirrit-Bold.ttf","Akhand Bengali":"AkhandBengali-Extrabold.ttf","Dhaka Type":"DhakaType-Unicode.ttf","Li Haqer Urochithi":"LiHaqerUrochithi-Unicode.ttf","Akkhor":"Akkhor-Italic.ttf","Kalpurush":"Kalpurush.ttf"};
+const FONT_OK={};
+async function loadFontFile(fam,file){
+  try{
+    let buf;const emb=window.__FONTS__&&window.__FONTS__[file];
+    if(emb){const bin=atob(emb);buf=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)buf[i]=bin.charCodeAt(i);}
+    else{const r=await fetch("fonts/"+file);if(!r.ok)throw new Error(r.status);buf=await r.arrayBuffer();}
+    const ff=new FontFace(fam,buf,{weight:fam==="Kalpurush"?"400":"100 900",display:"swap"});
+    await ff.load();document.fonts.add(ff);FONT_OK[fam]=true;
+  }catch(e){FONT_OK[fam]=false;console.warn("font failed:",fam,e);}
+}
+const FONTS_LOADED=Promise.all(Object.entries(FONT_FILES).map(([f,file])=>loadFontFile(f,file)));
 const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const C={plum:"#2E1239",pink:"#E8367C",orange:"#F26B1D",yellow:"#FFC72C",green:"#14855A",blue:"#2847B8",cream:"#FFF4E2"};
@@ -436,15 +453,22 @@ const FAVK=["food","song","person"];
 function initCS(){
   const w=(R.words||[]).slice(0,3);while(w.length<3)w.push("");
   const threeAns=(A.three||"").trim()||w.filter(Boolean).join(", ");
-  CS={layout:"qa",fmt:"story",name:A.name||"",words:w,quote:R.cardLine||"",showScore:true,showWords:true,showQuote:true,showAward:false,award:0,theme:"plum",photo:null,zoom:1,ox:0,oy:0,
+  CS={layout:"qa",fmt:"story",font:"modern",name:A.name||"",words:w,quote:R.cardLine||"",showScore:true,showWords:true,showQuote:true,showAward:false,award:0,theme:"plum",photo:null,zoom:1,ox:0,oy:0,
     qa:QAF.map(([k,e,q])=>{const a=k==="three"?threeAns:(A[k]||"");return{k,e,q,a,on:!!a&&k!=="hard"};})};
 }
-function loadFonts(){return Promise.all([document.fonts.load('700 200px "Atma"'),document.fonts.load('500 60px "Atma"'),document.fonts.load('600 40px "Hind Siliguri"')]).catch(()=>{});}
+function loadFonts(){return Promise.all([FONTS_LOADED,document.fonts.load('500 40px "Hind Siliguri"'),document.fonts.load('600 40px "Hind Siliguri"'),document.fonts.load('700 40px "Hind Siliguri"')]).catch(()=>{});}
 function lines(x,t,maxW){const w=String(t).split(/\s+/);let l="",out=[];for(const p of w){const s=l?l+" "+p:p;if(x.measureText(s).width>maxW&&l){out.push(l);l=p;}else l=s;}if(l)out.push(l);return out;}
 function clampLines(x,t,maxW,n){const L=lines(x,t,maxW);if(L.length<=n)return L;const o=L.slice(0,n);let last=o[n-1];while(last.length>1&&x.measureText(last+"…").width>maxW)last=last.slice(0,-1);o[n-1]=last+"…";return o;}
 function fit(x,t,maxW,size,weight,fam,min){let s=size;do{x.font=`${weight} ${s}px ${fam}`;if(x.measureText(t).width<=maxW)break;s-=4;}while(s>min);return s;}
 function arch(x,px,py,pw,ph){const r=pw/2;x.beginPath();x.moveTo(px,py+ph);x.lineTo(px,py+r);x.arc(px+r,py+r,r,Math.PI,0);x.lineTo(px+pw,py+ph);x.closePath();}
-const AT='"Atma","Hind Siliguri",sans-serif',HS='"Hind Siliguri",sans-serif';
+const FONTS={
+ modern:{n:"আধুনিক",d:'"Li Ador Noirrit","Hind Siliguri",sans-serif',a:'"Hind Siliguri",sans-serif',aw:500},
+ bold:{n:"জোরালো",d:'"Akhand Bengali","Hind Siliguri",sans-serif',a:'"Dhaka Type","Hind Siliguri",sans-serif',aw:400},
+ hand:{n:"হাতের লেখা",d:'"Li Haqer Urochithi","Hind Siliguri",sans-serif',a:'"Li Haqer Urochithi","Hind Siliguri",sans-serif',aw:400},
+ italic:{n:"স্টাইলিশ",d:'"Akkhor","Hind Siliguri",sans-serif',a:'"Akkhor","Hind Siliguri",sans-serif',aw:400},
+ classic:{n:"ক্লাসিক",d:'"Kalpurush",serif',a:'"Kalpurush",serif',aw:400},
+};
+let AT=FONTS.modern.d,AN=FONTS.modern.a,AW=500;const HS='"Hind Siliguri",sans-serif';
 function drawPhoto(x,shape,px,py,pw,ph,T){
   const photo=CS.photo;PBOX={px,py,pw,ph};
   x.save();if(shape==="circle"){x.beginPath();x.arc(px+pw/2,py+ph/2,pw/2,0,Math.PI*2);}else arch(x,px,py,pw,ph);x.clip();
@@ -462,6 +486,7 @@ function scoreBadge(x,cx,cy,r,T){
 }
 function drawCard(c){
   const H=(CS.layout==="qa"&&CS.fmt==="post")?1350:1920;if(c.height!==H)c.height=H;
+  const F=FONTS[CS.font]||FONTS.modern;AT=F.d;AN=F.a;AW=F.aw;
   const x=c.getContext("2d");x.setTransform(1,0,0,1,0,0);x.textBaseline="alphabetic";x.textAlign="left";
   PBOX=null;OVER=false;
   const T=TC[CS.theme];x.fillStyle=T.bg;x.fillRect(0,0,1080,H);
@@ -471,7 +496,10 @@ const onAcc=T=>T.acc===C.yellow?C.plum:C.cream;
 const panelCol=T=>T.bg===C.cream?"rgba(46,18,57,.06)":"rgba(255,255,255,.09)";
 function header(x,T,o){
   x.textAlign="left";x.fillStyle=T.fg;x.font=`700 ${o.rf}px ${AT}`;x.fillText("Year Recap",o.px,o.ry);
-  x.font=`700 ${o.df}px ${AT}`;let gx=o.px-6;
+  let df=o.df;x.font=`700 ${df}px ${AT}`;
+  const tw=["২","০","২","৬"].reduce((s,d)=>s+x.measureText(d).width-4,0)+Math.max(0,(x.measureText("৬").actualBoundingBoxRight||0)-x.measureText("৬").width);
+  if(o.maxW&&tw>o.maxW){df=Math.floor(df*o.maxW/tw);x.font=`700 ${df}px ${AT}`;}
+  let gx=o.px-6;
   ["২","০","২","৬"].forEach((d,k)=>{x.fillStyle=T.year[k];x.fillText(d,gx,o.dy);gx+=x.measureText(d).width-4;});
   return gx;
 }
@@ -479,8 +507,8 @@ function header(x,T,o){
 /* ---- layout 1: question & answer ---- */
 function drawQA(x,T,H){
   const W=1080,L=70,IL=L,IR=W-L;
-  header(x,T,{px:L,rf:84,ry:150,df:236,dy:380});
   const hasP=!!CS.photo;
+  header(x,T,{px:L,rf:84,ry:150,df:236,dy:380,maxW:hasP?580:660});
   if(hasP){drawPhoto(x,"circle",W-70-330,64,330,330,T);if(CS.showScore)scoreBadge(x,W-92,340,74,T);}
   else if(CS.showScore)scoreBadge(x,W-190,220,120,T);
   let y=425;
@@ -507,13 +535,13 @@ function drawQA(x,T,H){
       it.items.forEach((f,j)=>{const cx=IL+j*(cw+22),col=T.bands[(k+j)%3];
         x.fillStyle=col[0];x.beginPath();x.roundRect(cx,y,cw,it.h,26);x.fill();
         x.fillStyle=col[1];x.font=`600 ${qs}px ${HS}`;x.globalAlpha=.9;x.fillText(clampLines(x,f.e+" "+f.q,cw-44,1)[0],cx+22,y+qs+20);x.globalAlpha=1;
-        x.font=`700 ${as}px ${AT}`;f.ls.forEach((l,m)=>x.fillText(l,cx+22,y+qs+30+lh*(m+1)-lh*.25));});
+        x.font=`${AW>=500?700:AW} ${as}px ${AN}`;f.ls.forEach((l,m)=>x.fillText(l,cx+22,y+qs+30+lh*(m+1)-lh*.25));});
       y+=it.h+gap;k+=n;
     }else{
       const col=T.bands[k%3];x.font=`600 ${qs}px ${HS}`;const lbl=it.e+" "+it.q,pw=x.measureText(lbl).width+qs*1.4;
       x.fillStyle=col[0];x.beginPath();x.roundRect(IL,y,pw,pillH,pillH/2);x.fill();
       x.fillStyle=col[1];x.fillText(lbl,IL+qs*.7,y+pillH*.66);
-      y+=pillH+Math.round(14*sc);x.fillStyle=T.fg;x.font=`500 ${as}px ${AT}`;
+      y+=pillH+Math.round(14*sc);x.fillStyle=T.fg;x.font=`${AW} ${as}px ${AN}`;
       for(const l of it.ls){if(y+lh>bottom+20){OVER=true;break;}x.fillText(l,IL+qs*.7,y+lh*.78);y+=lh;}
       y+=gap;k++;
     }
@@ -524,10 +552,10 @@ function measure(x,favs,sc,width){
   const maxL=sc>.72?3:2;let h=0;const rows=[];let favDone=false;
   for(const q of CS.qa.filter(q=>q.on&&q.a.trim())){
     if(FAVK.includes(q.k)){if(favDone)continue;favDone=true;
-      const n=favs.length,cw=(width-(n-1)*22)/n;x.font=`700 ${as}px ${AT}`;
+      const n=favs.length,cw=(width-(n-1)*22)/n;x.font=`${AW>=500?700:AW} ${as}px ${AN}`;
       const its=favs.map(f=>({...f,ls:clampLines(x,f.a.trim(),cw-44,2)}));
       const bh=qs+30+lh*Math.max(...its.map(i=>i.ls.length))+20;rows.push({fav:true,items:its,h:bh});h+=bh+gap;continue;}
-    x.font=`500 ${as}px ${AT}`;const ls=clampLines(x,q.a.trim(),width-qs*.7-8,maxL);
+    x.font=`${AW} ${as}px ${AN}`;const ls=clampLines(x,q.a.trim(),width-qs*.7-8,maxL);
     rows.push({...q,ls});h+=pillH+Math.round(14*sc)+ls.length*lh+gap;
   }
   return{rows,h:h-gap};
@@ -536,10 +564,10 @@ function measure(x,favs,sc,width){
 /* ---- layout 2: poster ---- */
 function drawPoster(x,T,H){
   const W=1080;
-  header(x,T,{px:70,rf:76,ry:140,df:300,dy:420});
+  header(x,T,{px:70,rf:76,ry:140,df:300,dy:420,maxW:940});
   let y=460;const photo=CS.photo;
   const words=CS.showWords?CS.words.map(s=>s.trim()).filter(Boolean).slice(0,3):[];
-  x.font=`500 54px ${AT}`;
+  x.font=`${AW} 54px ${AN}`;
   const ql=(CS.showQuote&&CS.quote.trim())?clampLines(x,"“"+CS.quote.trim()+"”",W-150,photo?2:3):[];
   const aw=CS.showAward&&R.awards&&R.awards[CS.award];
   const bandH=photo?118:150,wordsH=words.length?words.length*(bandH+16)+40:0,quoteH=ql.length?ql.length*72+50:0,awardH=aw?150:0;
@@ -560,7 +588,7 @@ function drawPoster(x,T,H){
   if(words.length){y+=20;words.forEach((w,k)=>{x.save();x.translate(W/2,y+bandH/2);x.rotate((k%2?2:-2)*Math.PI/180);
     x.fillStyle=T.bands[k][0];x.fillRect(-W/2-40,-bandH/2,W+80,bandH);x.fillStyle=T.bands[k][1];x.textAlign="center";
     const s=fit(x,w,W-180,bandH*.68,700,AT,44);x.font=`700 ${s}px ${AT}`;x.fillText(w,0,s*.36);x.restore();y+=bandH+16;});y+=24;}
-  if(ql.length){y+=50;x.fillStyle=T.fg;x.font=`500 54px ${AT}`;x.textAlign="left";ql.forEach((l,k)=>x.fillText(l,70,y+k*72));y+=ql.length*72;}
+  if(ql.length){y+=50;x.fillStyle=T.fg;x.font=`${AW} 54px ${AN}`;x.textAlign="left";ql.forEach((l,k)=>x.fillText(l,70,y+k*72));y+=ql.length*72;}
   if(aw){y+=40;x.textAlign="left";x.fillStyle=T.acc;const s=fit(x,"🏆 "+aw.name,W-140,50,700,AT,32);x.font=`700 ${s}px ${AT}`;x.fillText("🏆 "+aw.name,70,y+30);
     x.fillStyle=T.fg;x.globalAlpha=.85;x.font=`500 34px ${HS}`;x.fillText(clampLines(x,aw.reason||"",W-150,1)[0]||"",72,y+82);x.globalAlpha=1;}
 }
@@ -591,6 +619,11 @@ $("edSave").onclick=()=>saveCard($("pv"),"edMsg");$("edShare").onclick=()=>share
 function renderLayoutUI(){
   $("layouts").innerHTML=[["qa","প্রশ্ন-উত্তর"],["poster","পোস্টার"]].map(([k,l])=>`<button type="button" class="pick" data-l="${k}" aria-pressed="${CS.layout===k}">${l}</button>`).join("");
   $("layouts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.layout=b.dataset.l;openEditor();});
+  $("fontPicks").innerHTML=Object.entries(FONTS).map(([k,v])=>`<button type="button" class="pick" data-f="${k}" aria-pressed="${CS.font===k}" style="font-family:${v.d.replace(/"/g,"'")};font-size:19px">${v.n}</button>`).join("");
+  $("fontPicks").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.font=b.dataset.f;$("fontPicks").querySelectorAll(".pick").forEach(z=>z.setAttribute("aria-pressed",z===b));
+    FONTS_LOADED.then(()=>{const F=FONTS[CS.font];const miss=Object.keys(FONT_FILES).filter(f=>(F.d+F.a).includes(f)&&!FONT_OK[f]);
+      $("edMsg").textContent=miss.length?`"${miss.join(", ")}" ফন্ট লোড হয়নি। fonts ফোল্ডারে ফাইলটা আছে কিনা দেখো।`:"";
+      if(CS.fmt==="post")autoFit();redraw();});});
   $("fmtField").hidden=CS.layout!=="qa";
   $("fmts").innerHTML=[["story","স্টোরি (৯:১৬)"],["post","ফিড পোস্ট (৪:৫)"]].map(([k,l])=>`<button type="button" class="pick" data-f="${k}" aria-pressed="${CS.fmt===k}">${l}</button>`).join("");
   $("fmts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.fmt=b.dataset.f;if(CS.fmt==="post")autoFit();renderLayoutUI();redraw();});

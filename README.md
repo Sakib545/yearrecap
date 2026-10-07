@@ -6,6 +6,7 @@
 
 - `index.html` – পুরো সাইট (একটাই ফাইল, কোনো build লাগে না)
 - `api/recap.js` – Vercel serverless function, AI দিয়ে গল্প লেখে
+- `fonts/` – কার্ড আর সাইটের বাংলা ফন্ট (লাইসেন্স নোট ভেতরের README.txt-এ)
 - `package.json`, `.gitignore`
 
 ## Vercel-এ deploy
