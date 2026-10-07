@@ -620,7 +620,7 @@ function drawCard(c){
   const T=TC[CS.theme];x.fillStyle=T.bg;x.fillRect(0,0,1080,H);
   const LD={qa:drawQA,collage:drawCollage,poster:drawPoster,blob:drawBlob,ticket:drawTicket,magazine:drawMag,chat:drawChat,receipt:drawReceipt,letter:drawLetter,notebook:drawNotebook,
     qa_tiles:drawQATiles,qa_timeline:drawQATimeline,qa_interview:drawQAInterview,qa_type:drawQAType,qa_exam:drawQAExam,
-    rickshaw:drawRickshaw,memorypass:drawMemPass,paper2:drawPaper2,profile:drawProfile,board:drawBoard,idcard:drawIDCard,playlist:drawPlaylist,passport:drawPassport,game:drawGame,news:drawNews,cinema:drawCinema,cricket:drawCricket,chalk:drawChalk,lock:drawLock,cert:drawCert,search:drawSearch,comic:drawComic};
+    rickshaw:drawRickshaw,memorypass:drawMemPass,paper2:drawPaper2,traffic:drawTraffic,train:drawTrain,map:drawMap,profile:drawProfile,board:drawBoard,idcard:drawIDCard,playlist:drawPlaylist,passport:drawPassport,game:drawGame,news:drawNews,cinema:drawCinema,cricket:drawCricket,chalk:drawChalk,lock:drawLock,cert:drawCert,search:drawSearch,comic:drawComic};
   (LD[CS.layout]||drawBlob)(x,T,H);
   drawPattern(x,T,H);
 }
@@ -752,9 +752,9 @@ $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>setTab(b.dataset.t
 /* designs, and the font + colour each one looks best in */
 const DESIGNS=[
  ["প্রশ্ন-উত্তর",[["qa","ক্লাসিক"],["qa_tiles","বেন্টো"],["qa_timeline","বছরের পথ"],["qa_interview","সাক্ষাৎকার"],["qa_type","স্টিকার"],["qa_exam","পরীক্ষার খাতা"],["chat","চ্যাট"],["notebook","নোটবুক"],["receipt","রসিদ"]]],
- ["মজার ফরম্যাট",[["cricket","ক্রিকেট স্কোর"],["chalk","চায়ের দোকান"],["lock","লক স্ক্রিন"],["search","সার্চ রেজাল্ট"],["comic","কমিক"],["playlist","প্লেলিস্ট"],["game","গেম কার্ড"],["profile","প্রোফাইল"],["board","স্টেশন বোর্ড"],["idcard","আইডি কার্ড"]]],
+ ["মজার ফরম্যাট",[["cricket","ক্রিকেট স্কোর"],["chalk","চায়ের দোকান"],["lock","লক স্ক্রিন"],["search","সার্চ রেজাল্ট"],["comic","কমিক"],["playlist","প্লেলিস্ট"],["game","গেম কার্ড"],["profile","প্রোফাইল"],["board","স্টেশন বোর্ড"],["idcard","আইডি কার্ড"],["traffic","ঢাকার জ্যাম"],["train","ট্রেনের যাত্রী"],["map","স্মৃতির মানচিত্র"]]],
  ["পোস্টার ও কার্ড",[["blob","গল্প"],["memorypass","স্মৃতির পাসপোর্ট"],["paper2","বছরের পত্রিকা"],["rickshaw","রিকশা আর্ট"],["cinema","সিনেমার পোস্টার"],["news","দৈনিক ২০২৬"],["passport","পাসপোর্ট"],["cert","সনদপত্র"],["ticket","টিকিট"],["letter","চিঠি"],["magazine","ম্যাগাজিন"],["poster","পোস্টার"],["collage","কোলাজ"]]]];
-const REC={_:["modern","plum"],memorypass:["modern","forest"],paper2:["modern","cream"],profile:["hind","cream"],board:["anek","night"],idcard:["baloo","blue"],blob:["ador","cream"],qa_exam:["hand","blue"],chalk:["hand","plum"],rickshaw:["baloo","teal"],playlist:["anek","plum"],passport:["modern","navy"],
+const REC={_:["modern","plum"],traffic:["bold","night"],train:["baloo","green"],map:["modern","cream"],memorypass:["modern","forest"],paper2:["modern","cream"],profile:["hind","cream"],board:["anek","night"],idcard:["baloo","blue"],blob:["ador","cream"],qa_exam:["hand","blue"],chalk:["hand","plum"],rickshaw:["baloo","teal"],playlist:["anek","plum"],passport:["modern","navy"],
   game:["baloo","blue"],news:["tiro","plum"],cinema:["ador","cinema"],cricket:["ador","green"],lock:["hind","plum"],cert:["classic","navy"],search:["hind","cream"],comic:["bold","yellow"],
   letter:["hand","blue"],notebook:["modern","lavender"],receipt:["modern","pink"],ticket:["modern","pink"],magazine:["mina","plum"],qa_type:["ador","plum"],qa_timeline:["anek","mint"],qa_tiles:["baloo","plum"],qa_interview:["tiro","maroon"]};
 function applyRec(){const r=REC[CS.layout]||REC._;let ch=false;
@@ -1560,6 +1560,10 @@ function ribbon(x,cx,cy,w,h,col,txt,tcol,fs){x.save();x.translate(cx,cy);x.fillS
   x.fillStyle=tcol;x.textAlign="center";x.font=`700 ${fs}px ${AT}`;x.fillText(txt,0,fs*.35-6);x.restore();x.textAlign="left";}
 function burst(x,cx,cy,r1,r2,n,col,rot){x.save();x.translate(cx,cy);x.rotate((rot||0)*Math.PI/180);x.fillStyle=col;x.beginPath();for(let i=0;i<n*2;i++){const a=i/(n*2)*Math.PI*2,r=i%2?r2:r1;x.lineTo(Math.cos(a)*r,Math.sin(a)*r);}x.closePath();x.fill();x.restore();}
 const NM=()=>CS.name.trim()||"আমি";
+/* days from 1 January to the day the card is made (instead of a fixed 365) */
+function DAYS(){const d=new Date(),s=new Date(d.getFullYear(),0,1);return Math.floor((d-s)/864e5)+1;}
+const DN=()=>bn(DAYS());
+function DLEFT(){const d=new Date(),e=new Date(d.getFullYear()+1,0,1);return Math.max(1,Math.ceil((e-d)/864e5));}
 const SC=()=>bn(A.score)+"/১০";
 function pic(x,px,py,pw,ph,clip){const c=clip||(()=>{x.beginPath();x.rect(px,py,pw,ph);});if(CS.photo)photoIn(x,c,px,py,pw,ph);else illus(x,c,px,py,pw,ph);}
 const KL=(map,k,d)=>map[k]||map[k&&k[0]==="c"?"custom":""]||d;
@@ -1596,13 +1600,13 @@ function drawPlaylist(x,T,H){
   x.fillStyle="#fff";x.textAlign="left";x.font=`700 150px ${AT}`;x.fillText("২০২৬",ax+40,ay+as-50);
   const items=pickItems(6);
   x.font=`700 74px ${AT}`;const tt=NM()+"-এর ২০২৬",ts=fit(x,tt,760,74,700,AT,40);x.font=`700 ${ts}px ${AT}`;x.fillText(tt,80,1000);
-  x.fillStyle=GR;x.font=`500 36px ${HS}`;x.fillText(`${bn(items.length)}টি গান • ৩৬৫ দিন${CS.showScore?" • রেটিং "+SC():""}`,80,1056);
+  x.fillStyle=GR;x.font=`500 36px ${HS}`;x.fillText(`${bn(items.length)}টি গান • ${DN()} দিন${CS.showScore?" • রেটিং "+SC():""}`,80,1056);
   x.fillStyle=G;x.beginPath();x.arc(940,1010,72,0,Math.PI*2);x.fill();x.fillStyle=onAcc(T);x.beginPath();x.moveTo(918,975);x.lineTo(970,1010);x.lineTo(918,1045);x.closePath();x.fill();
   let y=1150;items.forEach((it,i)=>{const len=it.a.length,dur=bn((2+len%4)+":"+String((len*7)%60).padStart(2,"0"));
     x.fillStyle=i===0?G:GR;x.font=`600 36px ${HS}`;x.fillText(bn(i+1),80,y+52);
     x.fillStyle=i===0?G:"#fff";const s=fit(x,it.a,720,44,700,AN,28);x.font=`700 ${s}px ${AN}`;x.fillText(clampLines(x,it.a,720,1)[0],150,y+40);
     x.fillStyle=GR;x.font=`500 30px ${HS}`;x.fillText(it.q,150,y+84);x.textAlign="right";x.fillText(dur,1000,y+60);x.textAlign="left";y+=112;});
-  x.fillStyle="#535353";x.fillRect(80,1840,920,8);x.fillStyle="#fff";x.fillRect(80,1840,830,8);x.beginPath();x.arc(910,1844,16,0,Math.PI*2);x.fill();
+  const yr=new Date().getFullYear(),fr=Math.min(1,DAYS()/((yr%4===0&&yr%100!==0)||yr%400===0?366:365)),pw2=920*fr;x.fillStyle="#535353";x.fillRect(80,1840,920,8);x.fillStyle="#fff";x.fillRect(80,1840,pw2,8);x.beginPath();x.arc(80+pw2,1844,16,0,Math.PI*2);x.fill();
   x.fillStyle=GR;x.font=`500 28px ${HS}`;x.fillText("জানুয়ারি",80,1890);x.textAlign="right";x.fillText("ডিসেম্বর",1000,1890);x.textAlign="left";
 }
 
@@ -1692,8 +1696,8 @@ function drawCricket(x,T,H){
   for(let i=0;i<12;i++){x.fillStyle=i%2?"rgba(255,255,255,.04)":"rgba(0,0,0,.05)";x.fillRect(0,i*160,W,160);}
   const PX=60,PW=960;x.save();x.shadowColor="rgba(0,0,0,.5)";x.shadowBlur=40;x.fillStyle="#101820";x.beginPath();x.roundRect(PX,90,PW,1740,30);x.fill();x.restore();
   x.fillStyle=T.acc;x.beginPath();x.roundRect(PX,90,PW,120,[30,30,0,0]);x.fill();x.fillStyle=onAcc(T);x.font=`700 56px ${AT}`;x.textAlign="center";x.fillText("২০২৬  বনাম  জীবন",540,170);
-  x.fillStyle="#9FB3C8";x.font=`600 32px ${HS}`;x.fillText(clampLines(x,"ফাইনাল • ৩৬৫ দিনের ম্যাচ • ব্যাটিং: "+NM(),900,1)[0],540,270);
-  x.fillStyle="#FFD23F";x.font=`700 230px ${AT}`;x.fillText(CS.showScore?SC():"২০২৬",540,500);x.fillStyle="#fff";x.font=`700 44px ${AT}`;x.fillText(CS.showScore?"বছরের রেটিং  •  ৩৬৫ দিন":"৩৬৫ দিনের ইনিংস",540,570);
+  x.fillStyle="#9FB3C8";x.font=`600 32px ${HS}`;x.fillText(clampLines(x,"ফাইনাল • "+DN()+" দিনের ম্যাচ • ব্যাটিং: "+NM(),900,1)[0],540,270);
+  x.fillStyle="#FFD23F";x.font=`700 230px ${AT}`;x.fillText(CS.showScore?SC():"২০২৬",540,500);x.fillStyle="#fff";x.font=`700 44px ${AT}`;x.fillText(CS.showScore?"বছরের রেটিং  •  "+DN()+" দিন":DN()+" দিনের ইনিংস",540,570);
   x.fillStyle="#1E2A36";x.fillRect(PX+40,620,PW-80,64);x.fillStyle="#9FB3C8";x.font=`700 30px ${HS}`;x.textAlign="left";x.fillText("ইনিংসের হাইলাইট",PX+70,664);x.textAlign="right";x.fillText("রান",PX+PW-70,664);
   const LB={happy:["খুশির ছক্কা","৬"],win:["সেরা শট","৪"],learn:["নতুন টেকনিক","৪"],travel:["অ্যাওয়ে ম্যাচ","২"],person:["পার্টনারশিপ","১০০"],next:["পরের টার্গেট","?"],three:["এক কথায়","৬"],food:["ড্রিংকস ব্রেক","১"],song:["গ্যালারির গান","২"],hard:["কঠিন ওভার","০"],custom:["বোনাস রান","৪"]};
   let y=710;pickItems(6).forEach(it=>{const [l,r]=KL(LB,it.k,["বোনাস রান","৪"]);x.textAlign="left";x.fillStyle="#FFD23F";x.font=`700 30px ${HS}`;x.fillText(l,PX+70,y+38);
@@ -1767,7 +1771,7 @@ function drawSearch(x,T,H){
   x.fillStyle="#fff";x.save();x.shadowColor="rgba(0,0,0,.18)";x.shadowBlur=20;x.shadowOffsetY=4;x.beginPath();x.roundRect(60,220,960,110,55);x.fill();x.restore();
   x.strokeStyle="#9AA0A6";x.lineWidth=5;x.beginPath();x.arc(120,275,20,0,Math.PI*2);x.stroke();x.beginPath();x.moveTo(134,290);x.lineTo(150,306);x.stroke();
   x.fillStyle="#202124";x.font=`500 42px ${HS}`;x.fillText(clampLines(x,NM()+"-এর ২০২৬ কেমন গেল?",820,1)[0],175,290);
-  x.fillStyle="#70757A";x.font=`500 30px ${HS}`;x.fillText("প্রায় ৩৬৫টি ফলাফল (০.২০২৬ সেকেন্ড)",70,395);
+  x.fillStyle="#70757A";x.font=`500 30px ${HS}`;x.fillText("প্রায় "+DN()+"টি ফলাফল (০.২০২৬ সেকেন্ড)",70,395);
   let y=430;const ws=CS.showWords?CS.words.map(w=>w.trim()).filter(Boolean):[];
   if(CS.showScore||ws.length){const bh=CS.showScore&&ws.length?330:200;x.fillStyle="#F1F3F4";x.beginPath();x.roundRect(60,y,960,bh,28);x.fill();let yy=y;
     if(CS.showScore){x.fillStyle="#202124";x.font=`700 120px ${AT}`;x.fillText(SC(),100,yy+150);x.font=`600 36px ${HS}`;x.fillStyle="#3C4043";x.fillText("বছরের রেটিং • সূত্র: "+NM()+" নিজে",100,yy+200);yy+=210;}
@@ -1952,7 +1956,7 @@ function drawProfile(x,T,H){
   const cx=180,cy=300,r=120;const rg=x.createLinearGradient(cx-r,cy+r,cx+r,cy-r);[T.year[0],T.year[1],T.year[2]].map(c=>c===C.cream||c==="#FFE7A8"||c==="#F3EAD3"?C.pink:c).forEach((c,i)=>rg.addColorStop(i/2,c));
   x.fillStyle=rg;x.beginPath();x.arc(cx,cy,r+14,0,Math.PI*2);x.fill();x.fillStyle="#fff";x.beginPath();x.arc(cx,cy,r+5,0,Math.PI*2);x.fill();
   const clip=()=>{x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);};if(CS.photo)photoIn(x,clip,cx-r,cy-r,2*r,2*r);else{x.fillStyle=T.bg===C.cream?C.pink:T.bg;clip();x.fill();x.fillStyle="#fff";x.textAlign="center";x.font=`700 110px ${AT}`;x.fillText(NM()[0],cx,cy+38);x.textAlign="left";}
-  const st=[["৩৬৫","দিন"],["১২","মাস"]];if(CS.showScore)st.push([bn(A.score)+"/১০","রেটিং"]);else st.push(["২০২৬","বছর"]);
+  const st=[[DN(),"দিন"],[bn(new Date().getMonth()+1),"মাস"]];if(CS.showScore)st.push([bn(A.score)+"/১০","রেটিং"]);else st.push(["২০২৬","বছর"]);
   st.forEach(([v,l],i)=>{const sx=440+i*215;x.textAlign="center";x.fillStyle=INK;const s=fit(x,v,200,60,700,AT,34);x.font=`700 ${s}px ${AT}`;x.fillText(v,sx,cy+5);x.font=`500 32px ${HS}`;x.fillText(l,sx,cy+52);});x.textAlign="left";
   let y=490;x.fillStyle=INK;x.font=`700 42px ${AT}`;x.fillText(clampLines(x,NM(),980,1)[0],50,y);y+=52;
   const ws=CS.showWords?CS.words.map(w=>w.trim()).filter(Boolean):[];x.font=`500 34px ${HS}`;
@@ -1979,7 +1983,7 @@ function drawProfile(x,T,H){
 /* ---------- স্টেশন বোর্ড (departures) ---------- */
 function drawBoard(x,T,H){
   const W=1080,BG="#0D0F14",AMB=T.acc===C.cream?C.yellow:T.acc,DIM="#2A2E38";x.fillStyle=BG;x.fillRect(0,0,W,H);
-  x.fillStyle="#1A1D25";x.fillRect(0,0,W,250);x.textAlign="left";x.fillStyle=AMB;x.font=`700 70px ${AT}`;x.fillText("প্রস্থান ২০২৬",60,120);x.fillStyle="#9AA3B2";x.font=`600 30px ${HS}`;x.fillText("জীবন জংশন • প্ল্যাটফর্ম ৩৬৫",62,175);
+  x.fillStyle="#1A1D25";x.fillRect(0,0,W,250);x.textAlign="left";x.fillStyle=AMB;x.font=`700 70px ${AT}`;x.fillText("প্রস্থান ২০২৬",60,120);x.fillStyle="#9AA3B2";x.font=`600 30px ${HS}`;x.fillText("জীবন জংশন • প্ল্যাটফর্ম "+DN(),62,175);
   x.textAlign="right";x.fillStyle=AMB;x.font=`700 80px ${AT}`;x.fillText("২৩:৫৯",W-60,130);x.fillStyle="#9AA3B2";x.font=`600 28px ${HS}`;x.fillText("৩১ ডিসেম্বর",W-60,178);x.textAlign="left";
   if(CS.photo){const r=56;photoIn(x,()=>{x.beginPath();x.arc(W-360,120,r,0,Math.PI*2);},W-360-r,120-r,2*r,2*r);x.strokeStyle=AMB;x.lineWidth=5;x.beginPath();x.arc(W-360,120,r,0,Math.PI*2);x.stroke();}
   x.fillStyle="#9AA3B2";x.font=`700 28px ${HS}`;[["সময়",60],["গন্তব্য",230],["অবস্থা",W-60]].forEach(([l,cx],i)=>{x.textAlign=i===2?"right":"left";x.fillText(l,cx,320);});x.textAlign="left";
@@ -2016,6 +2020,163 @@ function drawIDCard(x,T,H){
   const qx=CX+CW-200,qy=CY+CH-170;for(let i=0;i<9;i++)for(let j=0;j<9;j++){if(r()>.5||(i<3&&j<3)||(i>5&&j<3)||(i<3&&j>5)){x.fillRect(qx+i*14,qy+j*14,13,13);}}
 }
 
+/* ---------- ঢাকার জ্যাম ---------- */
+function wheel(x,cx,cy,r){x.fillStyle="#141418";x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fill();x.fillStyle="#9AA0A8";x.beginPath();x.arc(cx,cy,r*.45,0,Math.PI*2);x.fill();}
+function drawTraffic(x,T,H){
+  const W=1080;x.fillStyle="#2E2F36";x.fillRect(0,0,W,H);speckle(x,W,H,61,"#ffffff",1800);
+  // traffic light
+  x.fillStyle="#141418";x.beginPath();x.roundRect(60,60,120,330,26);x.fill();x.fillRect(110,390,20,110);
+  const lit=A.score>=7?2:A.score>=4?1:0,LC=["#FF3B30","#FFCC00","#34C759"];
+  LC.forEach((c,i)=>{const cy=120+i*105;if(i===lit){x.save();x.shadowColor=c;x.shadowBlur=50;x.fillStyle=c;x.beginPath();x.arc(120,cy,38,0,Math.PI*2);x.fill();x.restore();}else{x.fillStyle=c;x.globalAlpha=.22;x.beginPath();x.arc(120,cy,38,0,Math.PI*2);x.fill();x.globalAlpha=1;}});
+  // mirror with photo
+  const mx=700,my=70,mw=320,mh=170;x.fillStyle="#141418";x.fillRect(mx+mw/2-8,30,16,50);x.beginPath();x.roundRect(mx-12,my-12,mw+24,mh+24,60);x.fill();
+  const mclip=()=>{x.beginPath();x.roundRect(mx,my,mw,mh,50);};if(CS.photo)photoIn(x,mclip,mx,my,mw,mh);else{x.save();mclip();x.clip();const g=x.createLinearGradient(mx,my,mx+mw,my+mh);g.addColorStop(0,"#5D6B7A");g.addColorStop(1,"#C9D3DD");x.fillStyle=g;x.fillRect(mx,my,mw,mh);
+    x.fillStyle="rgba(255,255,255,.75)";x.font=`700 70px ${AT}`;x.textAlign="center";x.save();x.translate(mx+mw/2,my+mh/2+24);x.scale(-1,1);x.fillText("২০২৬",0,0);x.restore();x.restore();}
+  x.fillStyle="rgba(255,255,255,.18)";x.save();mclip();x.clip();x.beginPath();x.moveTo(mx+40,my);x.lineTo(mx+110,my);x.lineTo(mx+30,my+mh);x.lineTo(mx-40,my+mh);x.fill();x.restore();
+  x.textAlign="center";x.fillStyle="#C9D3DD";x.font=`600 26px ${HS}`;x.fillText("পেছনে ফিরে দেখা",mx+mw/2,my+mh+50);x.textAlign="left";
+  x.fillStyle="#FFCC00";x.font=`700 36px ${HS}`;x.fillText("জ্যামে আটকে, তবু এগিয়ে",220,330);
+  x.fillStyle="#F4F4F4";const ys=fit(x,"২০২৬",460,190,700,AT,90);x.font=`700 ${ys}px ${AT}`;x.fillText("২০২৬",214,330+ys*.9);
+  x.fillStyle="#C9D3DD";x.font=`700 42px ${AT}`;x.fillText(clampLines(x,"চালক: "+NM(),820,1)[0],220,560);
+  // lanes
+  const its=pickItems(5),LW=172,top=600;x.strokeStyle="rgba(255,255,255,.55)";x.lineWidth=6;x.setLineDash([40,30]);
+  for(let i=0;i<=its.length;i++){x.beginPath();x.moveTo(0,top+i*LW);x.lineTo(W,top+i*LW);x.stroke();}x.setLineDash([]);
+  its.forEach((it,i)=>{const y=top+i*LW+22,c=PAL[i%PAL.length],bus=i%2===0;
+    if(bus){x.fillStyle=c;x.beginPath();x.roundRect(60,y,940,118,[30,40,18,18]);x.fill();x.fillStyle="rgba(255,255,255,.85)";for(let k=0;k<8;k++)x.beginPath(),x.roundRect(110+k*104,y+14,80,40,8),x.fill();
+      x.fillStyle="#141418";x.beginPath();x.roundRect(940,y+12,50,60,10);x.fill();x.fillStyle="#FFCC00";x.font=`700 22px ${AT}`;x.textAlign="center";x.fillText("২০২৬",965,y+50);x.textAlign="left";
+      x.fillStyle="#fff";const s=fit(x,it.a,820,40,700,AN,24);x.font=`700 ${s}px ${AN}`;x.fillText(clampLines(x,it.a,820,1)[0],100,y+96);}
+    else{x.fillStyle="#3F7F3A";x.beginPath();x.roundRect(860,y+14,140,104,[30,40,14,14]);x.fill();x.fillStyle="rgba(200,230,255,.85)";x.beginPath();x.roundRect(910,y+32,74,44,8);x.fill();
+      x.fillStyle=c;x.fillRect(60,y,780,118);[C.yellow,"#fff",C.pink,C.green].forEach((bc,k)=>{x.fillStyle=bc;x.fillRect(60,y+k*9,780,5);x.fillRect(60,y+114-k*9,780,4);});
+      for(let k=0;k<14;k++){x.fillStyle=k%2?C.yellow:"#fff";x.beginPath();x.arc(80+k*55,y+64,6,0,Math.PI*2);x.fill();}
+      x.fillStyle="#fff";x.globalAlpha=0;x.globalAlpha=1;x.fillStyle="rgba(0,0,0,.35)";x.fillRect(90,y+34,720,56);x.fillStyle="#fff";const s=fit(x,it.a,700,40,700,AN,24);x.font=`700 ${s}px ${AN}`;x.fillText(clampLines(x,it.a,700,1)[0],104,y+74);}
+    wheel(x,200,y+120,22);wheel(x,bus?860:720,y+120,22);if(!bus)wheel(x,940,y+120,22);
+    x.font=`700 24px ${HS}`;const lw=x.measureText(it.q).width+26;x.fillStyle="#FFCC00";x.beginPath();x.roundRect(70,y-14,lw,36,8);x.fill();x.fillStyle="#141418";x.fillText(it.q,83,y+12);});
+  if(its.length){burst(x,1000,top+40,58,40,10,"#fff",8);x.fillStyle="#E8367C";x.textAlign="center";x.font=`700 26px ${AT}`;x.fillText("পিঁ পিঁ!",1000,top+48);x.textAlign="left";}
+  // bottom: speedometer + highway sign
+  const by=top+its.length*LW+30;
+  if(CS.showScore){const cx=260,cy=by+220,r=180;x.lineWidth=28;x.lineCap="butt";["#FF3B30","#FFCC00","#34C759"].forEach((c,i)=>{x.strokeStyle=c;x.beginPath();x.arc(cx,cy,r,Math.PI+i*Math.PI/3,Math.PI+(i+1)*Math.PI/3);x.stroke();});
+    for(let v=0;v<=10;v++){const a=Math.PI+v*Math.PI/10;x.strokeStyle="#fff";x.lineWidth=4;x.beginPath();x.moveTo(cx+Math.cos(a)*(r-30),cy+Math.sin(a)*(r-30));x.lineTo(cx+Math.cos(a)*(r-50),cy+Math.sin(a)*(r-50));x.stroke();}
+    const a=Math.PI+A.score*Math.PI/10;x.strokeStyle="#fff";x.lineWidth=10;x.lineCap="round";x.beginPath();x.moveTo(cx,cy);x.lineTo(cx+Math.cos(a)*(r-60),cy+Math.sin(a)*(r-60));x.stroke();x.fillStyle="#fff";x.beginPath();x.arc(cx,cy,18,0,Math.PI*2);x.fill();
+    x.textAlign="center";x.font=`700 64px ${AT}`;x.fillText(SC(),cx,cy+80);x.fillStyle="#C9D3DD";x.font=`600 28px ${HS}`;x.fillText("বছরের গতি",cx,cy+120);x.textAlign="left";}
+  const sx=540,sy=by+30,sw=480,sh=250;x.fillStyle="#0B6B3A";x.beginPath();x.roundRect(sx,sy,sw,sh,22);x.fill();x.strokeStyle="#fff";x.lineWidth=6;x.beginPath();x.roundRect(sx+14,sy+14,sw-28,sh-28,14);x.stroke();
+  x.fillStyle="#7A7F88";x.fillRect(sx+80,sy+sh,18,120);x.fillRect(sx+sw-98,sy+sh,18,120);
+  x.fillStyle="#fff";x.font=`700 40px ${HS}`;x.fillText("গন্তব্য",sx+44,sy+80);x.font=`700 96px ${AT}`;x.fillText("২০২৭",sx+44,sy+190);
+  x.beginPath();x.moveTo(sx+330,sy+120);x.lineTo(sx+420,sy+120);x.lineTo(sx+420,sy+90);x.lineTo(sx+460,sy+140);x.lineTo(sx+420,sy+190);x.lineTo(sx+420,sy+160);x.lineTo(sx+330,sy+160);x.closePath();x.fill();
+  x.font=`600 30px ${HS}`;x.fillText(bn(DLEFT())+" দিন বাকি",sx+300,sy+226);
+  x.fillStyle="#C9D3DD";x.textAlign="center";x.font=`600 30px ${HS}`;x.fillText("হর্ন বাজাবেন না, স্বপ্ন দেখছি",540,H-50);x.textAlign="left";
+}
+
+/* ---------- ট্রেনের যাত্রী ---------- */
+function drawTrain(x,T,H){
+  const W=1080;speckle(x,W,H,71,T.fg,800);
+  const RL=360,RR=720;for(let y=0;y<H;y+=46){x.fillStyle="rgba(120,85,50,.55)";x.fillRect(RL-70,y,RR-RL+140,18);}
+  x.fillStyle="#9AA0A8";x.fillRect(RL-6,0,12,H);x.fillRect(RR-6,0,12,H);
+  x.textAlign="left";x.fillStyle=T.fg;x.font=`700 40px ${AT}`;x.globalAlpha=.85;x.fillText("Year Recap",60,90);x.globalAlpha=1;
+  x.textAlign="right";x.font=`600 30px ${HS}`;x.fillStyle=T.fg;x.fillText("চালক: "+clampLines(x,NM(),300,1)[0],W-60,90);x.textAlign="left";
+  // engine
+  const ex=250,ew=580,ey=130,eh=300,EC=T.acc;x.fillStyle=EC;x.beginPath();x.moveTo(ex,ey+eh);x.lineTo(ex,ey+130);x.quadraticCurveTo(ex,ey,ex+ew/2,ey);x.quadraticCurveTo(ex+ew,ey,ex+ew,ey+130);x.lineTo(ex+ew,ey+eh);x.closePath();x.fill();
+  const wc=()=>{x.beginPath();x.roundRect(ex+120,ey+40,ew-240,140,40);};if(CS.photo)photoIn(x,wc,ex+120,ey+40,ew-240,140);else{x.fillStyle="#BFE3F2";wc();x.fill();}
+  x.strokeStyle="#141418";x.lineWidth=8;wc();x.stroke();
+  [ex+70,ex+ew-70].forEach(hx=>{x.save();x.shadowColor="#FFF3B0";x.shadowBlur=30;x.fillStyle="#FFF3B0";x.beginPath();x.arc(hx,ey+230,26,0,Math.PI*2);x.fill();x.restore();});
+  x.fillStyle="#141418";x.beginPath();x.roundRect(ex+150,ey+200,ew-300,70,12);x.fill();x.fillStyle="#FFCC00";x.textAlign="center";const es=fit(x,"২০২৬ এক্সপ্রেস",ew-330,40,700,AT,24);x.font=`700 ${es}px ${AT}`;x.fillText("২০২৬ এক্সপ্রেস",540,ey+248);x.textAlign="left";
+  // coaches
+  const its=pickItems(5),BG=["ক","খ","গ","ঘ","ঙ"],ch=230,gap=34;let y=ey+eh+gap;
+  its.forEach((it,i)=>{if(y+ch>H-300){OVER=true;return;}const c=T.bands[i%3];x.fillStyle="#141418";x.fillRect(530,y-gap,20,gap);
+    x.save();x.shadowColor="rgba(0,0,0,.3)";x.shadowBlur=20;x.fillStyle=c[0];x.beginPath();x.roundRect(ex,y,ew,ch,24);x.fill();x.restore();
+    x.fillStyle="rgba(255,255,255,.18)";x.fillRect(ex+20,y+14,ew-40,10);x.fillRect(ex+20,y+ch-24,ew-40,10);
+    for(let k=0;k<4;k++){[ex-14,ex+ew-14].forEach(wx=>{x.fillStyle="#141418";x.beginPath();x.roundRect(wx,y+30+k*48,28,34,6);x.fill();x.fillStyle="#BFE3F2";x.beginPath();x.arc(wx+14,y+42+k*48,7,0,Math.PI*2);x.fill();});}
+    x.fillStyle=c[1];x.font=`700 30px ${HS}`;x.fillText(`বগি ${BG[i]} • ${clampLines(x,it.q,ew-200,1)[0]}`,ex+40,y+68);
+    x.font=`700 26px ${HS}`;x.globalAlpha=.8;x.fillText("যাত্রী:",ex+40,y+116);x.globalAlpha=1;
+    x.font=`${AWB()} 42px ${AN}`;clampLines(x,it.a,ew-80,2).forEach((l,k)=>x.fillText(l,ex+40,y+166+k*50));
+    y+=ch+gap;});
+  // station sign + fare
+  const sy=H-250;x.fillStyle="#FFCC00";x.beginPath();x.roundRect(60,sy,600,150,16);x.fill();x.strokeStyle="#141418";x.lineWidth=8;x.beginPath();x.roundRect(72,sy+12,576,126,10);x.stroke();
+  x.fillStyle="#141418";x.font=`600 30px ${HS}`;x.fillText("পরবর্তী স্টেশন",100,sy+56);x.font=`700 60px ${AT}`;x.fillText("২০২৭",100,sy+120);
+  const nx=qaVal("next");if(nx){x.font=`600 28px ${AN}`;x.fillText(clampLines(x,"— "+nx,330,1)[0],300,sy+118);}
+  x.fillStyle="#7A7F88";x.fillRect(150,sy+150,16,80);x.fillRect(560,sy+150,16,80);
+  if(CS.showScore){x.save();x.translate(860,sy+70);x.rotate(6*Math.PI/180);x.fillStyle="#FFF6D8";x.beginPath();x.roundRect(-150,-80,300,170,14);x.fill();x.strokeStyle="#C24B47";x.lineWidth=4;x.setLineDash([8,8]);x.beginPath();x.moveTo(-60,-80);x.lineTo(-60,90);x.stroke();x.setLineDash([]);
+    x.fillStyle="#C24B47";x.textAlign="center";x.font=`700 26px ${HS}`;x.fillText("যাত্রার রেটিং",40,-30);x.font=`700 72px ${AT}`;x.fillText(SC(),40,48);x.save();x.translate(-105,5);x.rotate(-Math.PI/2);x.font=`700 24px ${HS}`;x.fillText("টিকিট",0,8);x.restore();x.restore();x.textAlign="left";}
+}
+
+/* ---------- আমার মানচিত্র ---------- */
+const BD_PATHS=["M592.5,744.7L589.1,751.0L583.5,753.2L577.6,737.4L561.7,736.0L555.9,724.7L551.8,723.3L547.0,729.3L540.8,729.6L539.4,732.3L533.4,745.9L533.0,763.2L539.3,774.7L544.5,779.2L544.0,796.0L553.2,820.1L551.4,823.7L537.4,797.4L535.3,788.3L517.3,766.1L516.4,745.9L504.6,726.1L508.5,719.6L512.9,719.0L509.4,709.4L515.2,698.4L514.4,689.4L510.7,697.1L508.6,697.1L508.6,689.4L505.9,691.6L504.2,687.9L504.6,684.8L509.4,681.8L505.6,681.2L509.4,676.9L497.8,677.6L504.2,664.4L499.9,667.5L492.2,633.1L491.9,628.3L493.7,629.1L491.9,627.6L490.2,632.0L486.8,623.2L490.2,613.9L486.2,605.6L494.6,601.4L498.9,589.1L496.3,589.1L495.0,597.6L484.0,606.2L488.4,613.6L483.5,615.1L477.9,591.0L469.3,573.8L452.9,550.7L442.0,542.1L445.6,522.2L442.0,532.1L436.2,536.8L435.9,543.2L427.2,540.3L429.9,542.1L429.0,544.7L420.1,545.3L425.5,547.9L423.5,551.1L414.2,550.9L414.1,547.9L406.2,547.0L408.4,550.9L404.5,552.8L415.3,556.2L416.3,560.8L411.2,570.6L399.2,574.8L391.9,568.6L385.3,553.1L383.5,553.7L387.8,566.2L377.2,568.0L371.3,562.2L367.2,553.1L362.0,552.8L354.2,539.8L346.9,517.2L335.7,499.9L337.0,482.5L340.5,471.6L338.4,467.0L339.7,463.9L335.5,464.0L333.4,461.1L331.9,446.1L336.2,441.0L346.6,439.4L345.0,431.5L350.2,426.5L349.8,423.8L353.6,422.0L349.1,416.9L351.3,413.0L347.4,408.2L352.3,397.1L352.3,389.9L363.8,386.2L369.1,389.0L372.0,386.9L379.5,374.3L380.7,364.9L387.7,356.5L385.2,355.0L383.5,346.3L391.4,339.1L395.0,340.6L395.1,336.5L402.6,333.7L416.3,339.8L421.3,335.7L425.4,335.8L418.8,341.7L423.5,344.4L417.9,347.9L422.4,370.5L416.3,372.6L410.6,382.2L411.7,393.7L407.9,403.6L401.1,405.7L399.9,408.4L405.3,415.4L400.8,417.8L400.4,421.1L407.9,439.8L412.0,443.5L415.9,456.8L419.7,459.3L416.9,463.0L423.0,494.8L430.3,500.1L428.4,477.6L430.5,472.4L433.3,472.3L442.2,483.2L449.8,509.5L456.6,513.2L457.8,516.6L461.7,511.9L473.2,509.5L484.5,496.4L477.9,470.9L487.4,453.0L498.5,446.6L503.1,439.8L499.9,418.2L500.8,408.1L513.1,419.6L518.3,416.9L524.5,408.7L529.9,406.9L535.4,418.5L539.0,410.2L543.7,410.4L542.9,423.9L549.1,448.7L555.1,459.5L556.3,470.0L552.5,485.0L556.6,519.1L565.1,526.9L567.1,541.9L573.9,551.3L574.6,570.1L584.3,624.8L584.1,628.3L579.2,630.4L586.3,664.1L584.1,685.4L586.3,722.2L592.5,744.7ZM502.4,681.8L508.6,702.8L506.8,714.7L505.7,717.1L497.2,717.1L497.8,719.9L495.0,720.6L492.2,715.3L494.6,706.6L491.9,686.5L494.3,682.5L497.6,684.1L496.3,692.2L499.1,686.4L498.0,679.8L502.4,678.8L502.4,681.8ZM496.3,667.0L493.1,677.6L489.3,686.5L489.3,665.5L493.7,657.8L496.3,667.0ZM402.0,598.5L406.8,616.5L401.0,627.9L391.1,635.8L385.8,635.1L383.6,632.0L390.5,621.5L392.5,594.1L402.0,598.5ZM398.8,580.1L408.5,576.5L409.9,579.2L403.3,585.5L397.5,584.0L398.8,580.1ZM442.7,566.6L454.0,581.6L453.9,592.2L447.8,593.0L440.0,585.1L437.1,575.1L442.7,566.6Z", "M529.8,293.9L524.8,297.8L524.4,312.9L521.9,316.2L504.3,317.1L507.1,325.4L500.7,321.4L497.9,322.3L498.6,333.1L495.0,347.4L490.8,347.8L486.9,343.9L486.0,338.6L476.5,336.8L476.5,346.5L470.3,349.2L463.3,339.4L459.1,354.8L449.0,357.6L429.3,355.5L426.3,370.1L422.4,370.5L417.9,347.9L423.5,344.4L418.8,341.7L425.4,335.8L421.3,335.7L416.3,339.8L402.6,333.7L406.4,326.4L413.5,322.5L411.8,319.7L414.7,316.6L410.3,311.1L412.4,309.6L411.8,304.6L406.9,302.0L412.5,290.9L406.5,284.8L411.4,275.5L408.8,272.1L401.9,271.9L399.0,246.8L380.1,246.7L371.8,233.0L376.1,222.2L374.7,208.2L413.1,201.9L438.1,210.8L455.2,207.7L459.1,212.1L464.5,212.7L469.5,208.8L473.7,209.9L476.2,206.7L515.0,204.7L525.5,210.6L532.7,211.6L540.5,218.2L549.4,219.7L572.4,240.0L573.4,246.2L571.6,249.0L559.2,252.8L547.7,245.2L539.1,245.2L540.5,261.1L529.8,293.9Z", "M229.7,173.9L232.2,190.3L243.6,188.6L271.9,200.5L301.9,209.1L334.9,206.1L345.7,208.7L351.6,206.7L360.3,210.2L374.7,208.2L376.1,222.2L371.8,233.0L380.1,246.7L399.0,246.8L401.9,271.9L408.8,272.1L411.4,275.5L406.5,284.8L412.5,290.9L406.9,302.0L411.8,304.6L412.4,309.6L410.3,311.1L414.7,316.6L411.8,319.7L413.5,322.5L406.4,326.4L402.6,333.7L395.1,336.5L395.0,340.6L391.4,339.1L383.5,346.3L385.2,355.0L387.7,356.5L380.7,364.9L379.5,374.3L372.0,386.9L369.1,389.0L363.8,386.2L352.3,389.9L352.3,397.1L347.4,408.2L351.3,413.0L349.1,416.9L353.6,422.0L349.8,423.8L350.2,426.5L345.0,431.5L341.5,432.1L345.0,435.2L344.1,438.1L340.4,436.6L332.3,439.9L330.9,430.5L336.2,425.7L335.4,424.7L326.7,426.6L325.2,430.3L316.1,427.6L318.9,431.2L329.0,433.7L329.2,446.2L325.8,455.2L296.5,448.5L287.3,443.8L288.4,446.9L304.9,457.0L310.0,463.4L329.0,468.7L333.8,481.6L331.1,478.2L332.3,489.2L328.3,497.5L326.0,497.9L326.7,493.4L322.1,497.7L313.2,498.8L309.2,505.4L297.1,498.9L292.6,502.9L296.9,503.6L296.7,506.7L290.4,512.6L284.6,507.6L282.4,499.6L273.6,500.1L254.7,524.7L246.2,527.0L234.0,518.4L220.0,496.4L215.1,493.5L214.6,489.6L218.5,492.3L224.2,485.1L221.7,483.1L216.4,485.0L214.6,477.2L207.8,475.4L212.9,468.6L209.1,468.7L204.0,459.6L204.1,455.2L207.7,457.2L204.1,442.9L197.7,438.4L193.9,438.0L191.9,441.0L191.1,437.2L194.8,433.9L181.4,414.8L172.7,415.2L167.0,407.2L173.7,389.9L171.7,380.5L195.3,394.6L216.8,389.8L215.1,379.6L217.3,372.2L232.0,357.8L233.6,343.5L224.1,331.2L223.3,319.1L229.3,269.1L226.8,263.8L217.2,256.8L211.1,234.4L214.7,207.8L222.1,195.4L221.7,184.3L225.7,175.4L229.7,173.9ZM322.9,462.4L317.5,464.4L310.2,455.2L324.2,460.1L330.2,466.8L322.9,462.4Z", "M230.9,168.8L221.7,184.3L222.1,195.4L214.7,207.8L192.3,206.9L172.4,201.1L163.9,206.0L159.8,202.0L156.2,189.6L118.3,188.1L108.4,184.4L102.1,174.9L104.0,166.1L98.6,160.1L94.7,158.6L94.8,161.0L85.1,165.5L67.7,160.3L54.1,147.5L53.5,138.9L33.2,120.0L29.0,117.9L16.3,122.0L11.2,114.2L9.5,103.4L19.3,86.3L17.9,78.7L19.9,72.7L27.9,65.5L41.7,60.5L43.0,51.3L55.1,40.1L63.5,41.4L58.9,27.3L45.1,23.1L42.8,28.1L40.2,25.8L47.6,5.4L50.3,4.5L52.5,14.6L83.8,32.7L83.3,36.0L90.9,44.9L82.4,52.1L84.7,53.8L95.5,49.8L100.1,51.6L105.3,59.0L111.8,52.0L124.5,59.3L130.1,57.9L132.7,56.2L128.2,52.2L128.7,49.2L125.3,49.9L123.3,44.8L116.5,42.0L113.8,36.8L120.1,29.4L133.2,37.5L134.7,42.2L140.8,45.0L139.8,47.5L136.4,46.8L136.5,50.6L142.9,70.2L154.8,76.8L158.0,82.5L170.5,90.8L177.6,88.5L180.2,91.6L189.7,90.8L196.8,96.2L199.0,87.5L205.7,80.6L200.0,78.5L204.8,73.8L199.5,70.7L202.6,67.0L206.1,67.7L206.0,60.0L211.0,59.6L211.4,68.1L219.4,70.3L224.2,86.1L228.4,92.3L231.6,91.2L233.4,93.5L228.8,97.7L234.2,100.1L227.6,116.5L234.2,141.5L230.9,168.8Z", "M93.4,343.0L95.7,338.3L94.1,329.4L87.0,322.9L84.3,322.3L81.0,328.5L60.7,325.5L51.2,318.0L14.0,299.6L11.0,294.6L10.4,285.8L7.3,281.1L2.8,279.4L6.8,264.2L9.8,263.3L11.3,258.5L18.0,251.7L14.7,241.7L25.8,237.7L31.0,246.7L40.0,248.4L52.9,227.0L56.3,203.6L71.4,206.2L81.0,203.2L100.1,207.6L104.3,202.6L118.0,206.6L116.1,203.7L125.4,191.7L124.5,187.8L156.2,189.6L159.8,202.0L163.9,206.0L172.4,201.1L192.3,206.9L214.7,207.8L211.1,234.4L214.3,250.6L217.2,256.8L226.8,263.8L229.3,269.1L228.4,284.4L225.4,291.1L224.1,331.2L230.7,337.9L233.9,346.3L229.8,361.7L217.3,372.2L215.1,379.6L216.8,389.8L198.6,395.3L168.7,379.2L148.0,378.7L136.4,369.9L136.1,362.9L123.7,346.9L118.8,345.5L105.3,352.8L96.8,348.9L93.4,343.0Z", "M135.0,639.2L137.4,623.9L128.8,608.5L130.7,607.2L126.3,594.4L127.5,585.4L124.0,574.7L118.5,571.9L122.1,566.7L115.9,545.0L119.6,539.2L120.6,530.1L114.1,525.7L107.1,512.2L108.7,498.4L122.5,480.6L105.0,475.7L99.0,478.0L88.9,473.7L87.6,468.0L98.3,440.7L96.6,439.3L91.8,443.6L77.8,426.8L72.9,426.3L72.3,421.2L69.1,419.8L73.7,389.7L83.4,387.6L91.2,379.9L89.6,370.1L92.6,364.1L86.1,357.9L86.6,347.9L93.4,343.0L96.8,348.9L105.3,352.8L118.8,345.5L122.6,346.2L132.4,356.2L136.6,364.1L136.4,369.9L142.5,375.6L151.5,379.4L162.1,378.3L171.7,380.5L173.7,389.9L167.4,408.5L172.7,415.2L181.4,414.8L194.8,433.9L191.1,437.2L191.9,441.0L193.9,438.0L197.7,438.4L204.1,442.9L207.7,457.2L204.1,455.2L204.0,459.6L209.1,468.7L212.9,468.6L207.8,475.4L214.6,477.2L216.4,485.0L221.7,483.1L224.2,485.1L218.5,492.3L214.6,489.6L215.1,493.5L220.0,496.4L234.0,518.4L246.2,527.0L250.5,532.9L246.6,534.7L244.0,541.1L246.2,545.3L240.6,549.9L246.4,552.7L242.8,555.7L249.7,565.6L248.4,576.2L252.7,582.8L245.2,593.7L239.1,589.9L240.0,600.6L234.7,611.0L238.9,635.5L235.7,638.4L229.4,637.7L235.9,643.6L235.7,652.2L240.9,662.2L240.0,664.4L228.0,672.1L225.4,669.7L218.2,672.0L212.1,669.3L210.3,658.7L206.7,666.4L217.1,678.3L213.0,683.0L203.7,681.8L205.0,687.5L202.6,690.0L199.9,688.3L196.2,682.6L195.0,674.4L199.7,664.4L200.6,643.9L205.0,632.5L200.1,620.0L205.0,612.5L207.6,601.4L197.8,619.7L201.6,632.5L198.1,649.1L195.7,650.4L196.2,635.9L190.5,622.0L190.6,610.2L188.4,607.2L188.4,634.0L190.7,629.2L193.8,637.0L190.3,644.9L194.3,653.5L193.1,661.0L187.0,667.9L187.1,678.8L179.5,687.7L174.8,684.1L174.4,672.1L177.1,662.1L172.6,652.2L173.1,663.3L166.1,674.9L163.9,673.1L165.3,682.1L162.6,690.3L165.6,693.2L156.9,697.9L153.8,693.9L155.8,688.8L151.6,674.6L147.4,678.0L141.0,674.0L137.9,662.6L139.3,648.3L135.0,639.2ZM139.5,677.1L145.4,680.8L144.6,687.1L134.2,677.1L135.8,670.4L133.5,659.9L136.3,661.6L139.5,677.1Z", "M312.8,502.0L320.5,520.3L324.3,523.3L321.7,525.6L316.1,525.0L311.0,536.7L307.4,537.5L308.9,541.2L302.9,542.1L310.9,546.1L314.3,543.9L317.9,547.9L320.8,563.0L313.9,567.5L311.8,579.5L315.6,568.0L319.8,566.6L326.8,569.9L332.8,583.4L330.2,582.3L334.3,595.8L333.6,604.4L326.5,619.9L319.3,623.7L311.3,637.7L304.8,634.0L309.1,620.6L307.8,608.7L305.7,608.1L305.2,619.2L308.0,623.5L303.8,628.3L302.5,635.8L294.7,650.5L291.4,666.3L281.3,675.5L276.3,675.6L267.2,672.0L271.4,657.8L263.9,668.7L258.4,667.5L259.7,656.2L276.3,632.5L282.9,631.1L285.5,620.6L281.6,629.8L274.2,632.8L262.0,649.8L254.9,648.3L259.8,640.0L260.8,630.0L265.3,625.4L262.0,626.6L253.1,642.1L253.1,650.2L251.2,651.8L246.9,648.6L239.6,610.0L256.6,579.9L252.7,582.8L248.6,576.9L250.3,567.7L242.8,555.7L246.4,552.7L240.6,549.9L246.2,545.3L244.0,541.1L246.6,534.7L250.5,532.9L246.2,527.0L254.7,524.7L273.6,500.1L282.4,499.6L284.6,507.6L290.4,512.6L297.0,506.0L295.9,502.8L292.6,502.9L295.2,499.7L301.2,499.9L309.2,505.4L312.8,502.0ZM331.1,650.2L332.8,656.8L327.5,659.8L324.4,665.6L319.6,667.5L323.2,665.5L320.5,662.5L322.0,656.8L331.1,650.2ZM297.7,656.8L302.7,649.0L305.7,648.3L296.5,670.1L297.7,656.8ZM304.8,641.6L304.0,645.1L298.7,652.2L301.1,645.1L304.8,641.6ZM310.9,642.5L317.4,651.5L316.1,656.0L308.4,662.2L305.7,656.8L308.4,643.0L310.9,642.5ZM324.8,639.7L317.1,643.4L319.5,634.9L333.6,625.4L331.1,634.0L330.2,630.1L326.8,645.0L320.3,648.4L319.6,644.9L324.8,639.7ZM375.5,619.7L377.5,620.6L377.5,628.1L374.0,632.0L372.8,626.0L375.5,619.7ZM380.0,622.4L380.1,614.9L380.8,612.2L382.7,615.5L380.0,622.4ZM377.0,616.7L375.0,615.8L380.0,597.6L382.3,606.2L377.0,616.7ZM337.0,605.2L332.1,585.8L336.1,588.1L339.4,595.4L339.7,598.7L338.0,594.8L337.1,597.3L337.0,605.2ZM338.0,589.1L338.7,580.9L340.5,587.1L338.0,589.1ZM356.2,579.2L364.5,587.7L361.9,600.9L362.1,623.5L354.2,637.7L352.0,639.7L351.1,637.7L343.6,647.3L338.0,649.1L336.9,646.0L342.4,634.0L335.2,644.5L333.2,644.9L332.4,642.2L336.2,631.1L336.0,622.9L341.9,608.9L343.1,595.6L338.0,571.9L326.7,564.2L326.3,554.2L330.1,541.2L338.4,538.5L356.2,579.2ZM330.9,525.3L341.9,535.6L330.8,534.8L323.2,541.0L321.8,549.1L318.2,543.3L313.5,541.3L315.8,527.7L330.9,525.3ZM340.5,515.4L336.2,515.4L340.5,520.3L336.5,519.8L331.8,514.6L322.2,515.4L320.2,512.3L322.7,507.8L330.2,504.0L340.5,515.4ZM320.5,499.2L321.1,501.6L315.3,507.8L313.5,500.1L320.5,499.2Z"];let BD_P2=null;
+const PLACES=[["ঢাকা",23.81,90.41],["চট্টগ্রাম",22.36,91.78,["চিটাগাং","চট্টগ্রাম"]],["সিলেট",24.89,91.87],["রাজশাহী",24.37,88.60],["খুলনা",22.85,89.54],["বরিশাল",22.70,90.37],["রংপুর",25.75,89.25],["ময়মনসিংহ",24.75,90.41],["কুমিল্লা",23.46,91.18],["গাজীপুর",24.00,90.42],["নারায়ণগঞ্জ",23.62,90.50],["কক্সবাজার",21.43,92.01,["কক্স বাজার","কক্সবাজার"]],["বান্দরবান",22.20,92.22],["রাঙামাটি",22.65,92.18,["রাঙ্গামাটি"]],["খাগড়াছড়ি",23.12,91.98],["সাজেক",23.38,92.29],["সেন্টমার্টিন",20.63,92.32,["সেন্ট মার্টিন","সেন্টমার্টিন"]],["কুয়াকাটা",21.82,90.12],["সুন্দরবন",21.95,89.18],["শ্রীমঙ্গল",24.31,91.73],["মৌলভীবাজার",24.48,91.77],["হবিগঞ্জ",24.37,91.42],["সুনামগঞ্জ",25.07,91.40],["বগুড়া",24.85,89.37],["দিনাজপুর",25.62,88.64],["পঞ্চগড়",26.33,88.55],["ঠাকুরগাঁও",26.03,88.46],["নীলফামারী",25.93,88.86],["লালমনিরহাট",25.92,89.45],["কুড়িগ্রাম",25.81,89.64],["গাইবান্ধা",25.33,89.53],["জয়পুরহাট",25.10,89.02],["নওগাঁ",24.80,88.93],["নাটোর",24.41,89.00],["চাঁপাইনবাবগঞ্জ",24.60,88.27],["পাবনা",24.00,89.24],["সিরাজগঞ্জ",24.45,89.70],["টাঙ্গাইল",24.25,89.92],["জামালপুর",24.92,89.95],["শেরপুর",25.02,90.02],["নেত্রকোনা",24.88,90.73],["কিশোরগঞ্জ",24.44,90.78],["নরসিংদী",23.92,90.72],["মানিকগঞ্জ",23.86,90.00],["মুন্সীগঞ্জ",23.54,90.53],["ফরিদপুর",23.61,89.84],["রাজবাড়ী",23.76,89.64],["গোপালগঞ্জ",23.01,89.83],["মাদারীপুর",23.17,90.20],["শরীয়তপুর",23.24,90.43],["ব্রাহ্মণবাড়িয়া",23.96,91.11],["চাঁদপুর",23.23,90.67],["লক্ষ্মীপুর",22.94,90.83],["নোয়াখালী",22.87,91.10],["ফেনী",23.01,91.40],["যশোর",23.17,89.21],["সাতক্ষীরা",22.72,89.07],["বাগেরহাট",22.65,89.79],["নড়াইল",23.17,89.51],["মাগুরা",23.49,89.42],["ঝিনাইদহ",23.54,89.17],["কুষ্টিয়া",23.90,89.12],["চুয়াডাঙ্গা",23.64,88.84],["মেহেরপুর",23.76,88.63],["পটুয়াখালী",22.36,90.33],["ভোলা",22.69,90.65],["বরগুনা",22.15,90.12],["ঝালকাঠি",22.64,90.20],["পিরোজপুর",22.58,89.97],["জাফলং",25.16,92.02],["রাতারগুল",25.00,91.97],["টাঙ্গুয়ার হাওর",25.13,91.08,["টাঙ্গুয়া"]],["সোনারগাঁও",23.65,90.60],["পাহাড়পুর",25.03,88.98],["মহাস্থানগড়",24.96,89.34],["নিঝুম দ্বীপ",22.05,91.0,["নিঝুম"]],["সীতাকুণ্ড",22.62,91.66],["কাপ্তাই",22.50,92.21],["নীলগিরি",21.91,92.32],["তেঁতুলিয়া",26.48,88.35],["সন্দ্বীপ",22.50,91.45]];
+function findPlaces(){const txt=CS.qa.filter(q=>q.on&&q.a.trim()).map(q=>q.a).join(" ");const found=[];
+  PLACES.forEach(([n,la,lo,al])=>{const names=[n].concat(al||[]);let best=-1;names.forEach(m=>{const i=txt.indexOf(m);if(i>=0&&(best<0||i<best))best=i;});if(best>=0)found.push({n,la,lo,i:best});});
+  return found.sort((a,b)=>a.i-b.i).filter((p,i,arr)=>!arr.some((q,j)=>j<i&&q.n===p.n)).slice(0,8);}
+/* landmarks for the imaginary map */
+function lmMountain(x,cx,cy,col){const INK="#4A3520";[[-40,10,70,90],[20,14,60,74]].forEach(([dx,dy,w,h])=>{x.fillStyle="#CDB78C";x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.moveTo(cx+dx-w,cy+dy+30);x.lineTo(cx+dx,cy+dy+30-h);x.lineTo(cx+dx+w,cy+dy+30);x.closePath();x.fill();x.stroke();
+    x.fillStyle="#FFF8EA";x.beginPath();x.moveTo(cx+dx-w*.28,cy+dy+30-h*.72);x.lineTo(cx+dx,cy+dy+30-h);x.lineTo(cx+dx+w*.28,cy+dy+30-h*.72);x.lineTo(cx+dx+w*.1,cy+dy+30-h*.8);x.closePath();x.fill();});
+  x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.moveTo(cx-40,cy-50);x.lineTo(cx-40,cy-100);x.stroke();x.fillStyle=col;x.beginPath();x.moveTo(cx-40,cy-100);x.lineTo(cx,cy-88);x.lineTo(cx-40,cy-76);x.closePath();x.fill();}
+function lmForest(x,cx,cy){const INK="#4A3520";[[-50,10,.9],[0,-6,1.1],[48,12,.85],[-24,30,.8],[26,32,.8]].forEach(([dx,dy,k])=>{x.fillStyle="#5E8C5A";x.strokeStyle=INK;x.lineWidth=2.5;x.beginPath();x.moveTo(cx+dx-26*k,cy+dy+20*k);x.lineTo(cx+dx,cy+dy-50*k);x.lineTo(cx+dx+26*k,cy+dy+20*k);x.closePath();x.fill();x.stroke();x.beginPath();x.moveTo(cx+dx,cy+dy+20*k);x.lineTo(cx+dx,cy+dy+34*k);x.stroke();});}
+function lmBeach(x,cx,cy){const INK="#4A3520";x.fillStyle="#F2C14E";x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.arc(cx+30,cy+10,40,Math.PI,0);x.closePath();x.fill();x.stroke();
+  for(let i=0;i<7;i++){const a=Math.PI+i*Math.PI/6;x.beginPath();x.moveTo(cx+30+Math.cos(a)*50,cy+10+Math.sin(a)*50);x.lineTo(cx+30+Math.cos(a)*66,cy+10+Math.sin(a)*66);x.stroke();}
+  x.strokeStyle="#3D7EA6";for(let k=0;k<2;k++){x.beginPath();for(let i=-70;i<=90;i+=6)x.lineTo(cx+i,cy+24+k*14+Math.sin(i/9)*4);x.stroke();}
+  x.strokeStyle=INK;x.lineWidth=4;x.beginPath();x.moveTo(cx-50,cy+20);x.quadraticCurveTo(cx-40,cy-30,cx-56,cy-70);x.stroke();x.fillStyle="#5E8C5A";for(let i=0;i<5;i++){const a=-Math.PI+i*Math.PI/4;x.beginPath();x.ellipse(cx-56+Math.cos(a)*22,cy-70+Math.sin(a)*10,26,8,a,0,Math.PI*2);x.fill();}}
+function lmVillage(x,cx,cy){const INK="#4A3520";[[-50,10,"#C24B47"],[0,-10,"#E39A3B"],[50,12,"#7A2E6E"]].forEach(([dx,dy,c])=>{x.fillStyle="#F6EBD3";x.strokeStyle=INK;x.lineWidth=2.5;x.fillRect(cx+dx-22,cy+dy-10,44,36);x.strokeRect(cx+dx-22,cy+dy-10,44,36);
+    x.fillStyle=c;x.beginPath();x.moveTo(cx+dx-30,cy+dy-8);x.lineTo(cx+dx,cy+dy-40);x.lineTo(cx+dx+30,cy+dy-8);x.closePath();x.fill();x.stroke();x.fillStyle=INK;x.fillRect(cx+dx-6,cy+dy+8,12,18);});
+  x.fillStyle="#C24B47";x.beginPath();x.moveTo(cx,cy-60);x.bezierCurveTo(cx-24,cy-80,cx-12,cy-96,cx,cy-84);x.bezierCurveTo(cx+12,cy-96,cx+24,cy-80,cx,cy-60);x.fill();}
+function lmTower(x,cx,cy,col){const INK="#4A3520";x.fillStyle="#E9DCC0";x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.moveTo(cx-26,cy+34);x.lineTo(cx-18,cy-60);x.lineTo(cx+18,cy-60);x.lineTo(cx+26,cy+34);x.closePath();x.fill();x.stroke();
+  for(let i=-22;i<=22;i+=11){x.fillRect(cx+i-4,cy-72,8,12);x.strokeRect(cx+i-4,cy-72,8,12);}x.fillStyle=col;x.beginPath();x.moveTo(cx-22,cy-72);x.lineTo(cx,cy-112);x.lineTo(cx+22,cy-72);x.closePath();x.fill();x.stroke();
+  x.fillStyle=INK;x.beginPath();x.arc(cx,cy-24,8,Math.PI,0);x.fill();x.fillRect(cx-8,cy-24,16,14);x.fillRect(cx-9,cy+14,18,20);}
+function lmStorm(x,cx,cy){const INK="#4A3520";x.fillStyle="#8E9AA6";x.strokeStyle=INK;x.lineWidth=3;[[-30,0,26],[0,-14,32],[32,2,24]].forEach(([dx,dy,r])=>{x.beginPath();x.arc(cx+dx,cy+dy,r,0,Math.PI*2);x.fill();x.stroke();});x.fillRect(cx-56,cy,112,22);
+  x.fillStyle="#F2C14E";x.beginPath();x.moveTo(cx-4,cy+20);x.lineTo(cx-20,cy+56);x.lineTo(cx-2,cy+52);x.lineTo(cx-12,cy+86);x.lineTo(cx+20,cy+42);x.lineTo(cx+2,cy+46);x.lineTo(cx+12,cy+20);x.closePath();x.fill();x.stroke();}
+function lmMarket(x,cx,cy){const INK="#4A3520";[[-40,"#C24B47"],[30,"#3D7EA6"]].forEach(([dx,c])=>{x.fillStyle=c;x.strokeStyle=INK;x.lineWidth=2.5;x.beginPath();x.moveTo(cx+dx-36,cy);x.lineTo(cx+dx,cy-44);x.lineTo(cx+dx+36,cy);x.closePath();x.fill();x.stroke();
+    x.fillStyle="#F6EBD3";x.fillRect(cx+dx-30,cy,60,30);x.strokeRect(cx+dx-30,cy,60,30);});x.fillStyle="#F2C14E";x.beginPath();x.arc(cx-6,cy+44,10,0,Math.PI*2);x.arc(cx+14,cy+46,8,0,Math.PI*2);x.fill();}
+function lmRiver(x,cx,cy){x.strokeStyle="#3D7EA6";x.lineWidth=10;x.lineCap="round";x.beginPath();x.moveTo(cx-90,cy-40);x.bezierCurveTo(cx-30,cy-60,cx-40,cy+20,cx+10,cy+10);x.bezierCurveTo(cx+60,cy,cx+50,cy+50,cx+100,cy+40);x.stroke();
+  x.fillStyle="#4A3520";x.beginPath();x.ellipse(cx-10,cy-36,9,13,.3,0,Math.PI*2);x.fill();x.lineWidth=4;x.strokeStyle="#4A3520";x.beginPath();x.moveTo(cx-2,cy-40);x.lineTo(cx-2,cy-80);x.lineTo(cx+20,cy-70);x.stroke();}
+const LMK={happy:["খুশির সৈকত",lmBeach],win:["অর্জনের চূড়া",lmMountain],learn:["শেখার বন",lmForest],travel:["ভ্রমণের বন্দর",lmRiver],person:["ভালোবাসার গ্রাম",lmVillage],three:["তিন শব্দের মিনার",lmTower],food:["স্বাদের হাট",lmMarket],song:["সুরের নদী",lmRiver],hard:["ঝড়ের পাহাড়",lmStorm]};
+function shipDraw(x,cx,cy,s){const INK="#4A3520";x.save();x.translate(cx,cy);x.scale(s,s);x.fillStyle="#8A5A2B";x.strokeStyle=INK;x.lineWidth=3;x.beginPath();x.moveTo(-60,0);x.lineTo(60,0);x.lineTo(44,26);x.lineTo(-44,26);x.closePath();x.fill();x.stroke();
+  x.beginPath();x.moveTo(0,0);x.lineTo(0,-90);x.stroke();x.fillStyle="#FFF8EA";x.beginPath();x.moveTo(4,-86);x.quadraticCurveTo(50,-50,4,-10);x.closePath();x.fill();x.stroke();x.beginPath();x.moveTo(-4,-70);x.quadraticCurveTo(-40,-44,-4,-16);x.closePath();x.fill();x.stroke();
+  x.fillStyle="#C24B47";x.beginPath();x.moveTo(0,-90);x.lineTo(24,-82);x.lineTo(0,-74);x.closePath();x.fill();x.restore();}
+function drawMap(x,T,H){
+  const W=1080,INK="#4A3520",SEA="#E2D4AE",LAND="#F1E3BD",RED="#B23A3A";
+  x.fillStyle=SEA;x.fillRect(0,0,W,H);speckle(x,W,H,91,"#7A5A2A",2600);
+  const vg=x.createRadialGradient(W/2,H/2,H*.35,W/2,H/2,H*.75);vg.addColorStop(0,"rgba(90,60,20,0)");vg.addColorStop(1,"rgba(90,60,20,.45)");x.fillStyle=vg;x.fillRect(0,0,W,H);
+  x.strokeStyle="rgba(74,53,32,.35)";x.lineWidth=2.5;x.lineCap="round";const rw=rng(5);for(let i=0;i<26;i++){const wx=40+rw()*960,wy=300+rw()*1500;x.beginPath();x.arc(wx,wy,14,Math.PI*1.1,Math.PI*1.9);x.arc(wx+26,wy,14,Math.PI*1.1,Math.PI*1.9);x.stroke();}
+  // island
+  const icx=540,icy=1000,rx=420,ry=580,r=rng(2026),N=26,pts=[];for(let i=0;i<N;i++){const a=i/N*Math.PI*2,k=.8+r()*.24+(i%7===0?.08:0);pts.push([icx+Math.cos(a)*rx*k,icy+Math.sin(a)*ry*k]);}
+  const isl=(sc)=>{const P=pts.map(([px,py])=>[icx+(px-icx)*sc,icy+(py-icy)*sc]);const mid=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2];x.beginPath();let m=mid(P[N-1],P[0]);x.moveTo(m[0],m[1]);for(let i=0;i<N;i++){const q=mid(P[i],P[(i+1)%N]);x.quadraticCurveTo(P[i][0],P[i][1],q[0],q[1]);}x.closePath();};
+  x.save();x.setLineDash([10,12]);x.strokeStyle="rgba(61,126,166,.45)";x.lineWidth=3;isl(1.1);x.stroke();isl(1.05);x.stroke();x.restore();
+  x.fillStyle="rgba(150,200,190,.55)";isl(1.03);x.fill();
+  x.save();x.shadowColor="rgba(74,53,32,.35)";x.shadowBlur=20;x.fillStyle=LAND;isl(1);x.fill();x.restore();
+  x.save();isl(1);x.clip();x.fillStyle="rgba(120,160,90,.18)";[[380,760,180],[700,1250,200],[620,820,130],[400,1450,150]].forEach(([a,b,rr])=>{x.beginPath();x.arc(a,b,rr,0,Math.PI*2);x.fill();});speckle(x,W,H,92,"#7A5A2A",900);x.restore();
+  x.strokeStyle=INK;x.lineWidth=5;isl(1);x.stroke();
+  // title cartouche
+  x.fillStyle="#F6EBD3";x.strokeStyle=INK;x.lineWidth=4;x.beginPath();x.moveTo(170,70);x.lineTo(910,70);x.quadraticCurveTo(880,160,910,250);x.lineTo(170,250);x.quadraticCurveTo(200,160,170,70);x.closePath();x.fill();x.stroke();
+  x.beginPath();x.moveTo(190,90);x.lineTo(890,90);x.quadraticCurveTo(862,160,890,230);x.lineTo(190,230);x.quadraticCurveTo(218,160,190,90);x.closePath();x.lineWidth=2;x.stroke();
+  x.textAlign="center";x.fillStyle=INK;const t1="স্মৃতির দেশের মানচিত্র",s1=fit(x,t1,620,66,700,AT,36);x.font=`700 ${s1}px ${AT}`;x.fillText(t1,540,152);
+  x.fillStyle=RED;const t2=nameGen(NM())+" ২০২৬",s2=fit(x,t2,600,40,700,AT,26);x.font=`700 ${s2}px ${AT}`;x.fillText(t2,540,206);x.textAlign="left";
+  compass(x,120,350,66,INK);
+  if(CS.photo){const pr=82,pcx=W-120,pcy=350;x.fillStyle="#C9A24A";x.beginPath();x.arc(pcx,pcy,pr+12,0,Math.PI*2);x.fill();photoIn(x,()=>{x.beginPath();x.arc(pcx,pcy,pr,0,Math.PI*2);},pcx-pr,pcy-pr,2*pr,2*pr);
+    x.fillStyle=INK;x.textAlign="center";x.font=`700 26px ${HS}`;x.fillText("অভিযাত্রী",pcx,pcy+pr+44);x.textAlign="left";}
+  // landmarks
+  const all=pickItems(8),nextIt=all.find(i=>i.k==="next"),its=all.filter(i=>i.k!=="next").slice(0,6);
+  const SL=[[330,560],[740,690],[330,900],[750,1040],[360,1280],[720,1400]];
+  const trail=[[540,460]].concat(its.map((_,i)=>[SL[i][0],SL[i][1]+40]));
+  x.save();x.strokeStyle=RED;x.lineWidth=5;x.setLineDash([4,14]);x.lineCap="round";x.beginPath();trail.forEach(([px,py],i)=>{if(!i)x.moveTo(px,py);else{const [qx,qy]=trail[i-1];x.quadraticCurveTo((px+qx)/2+(i%2?-80:80),(py+qy)/2,px,py);}});x.stroke();x.restore();
+  x.strokeStyle=RED;x.lineWidth=7;x.beginPath();x.moveTo(520,440);x.lineTo(560,480);x.moveTo(560,440);x.lineTo(520,480);x.stroke();x.fillStyle=RED;x.font=`700 26px ${HS}`;x.textAlign="center";x.fillText("শুরু: জানুয়ারি",540,425);
+  its.forEach((it,i)=>{const [cx,cy]=SL[i],L=it.k[0]==="c"?[endStop(it.q),lmTower]:(LMK[it.k]||[endStop(it.q),lmTower]),col=PAL[i%PAL.length];
+    L[1](x,cx,cy,col);
+    x.font=`700 30px ${AT}`;const nm=clampLines(x,L[0],300,1)[0],tw=x.measureText(nm).width+44,by=cy+64;
+    x.fillStyle=col;x.beginPath();x.moveTo(cx-tw/2,by);x.lineTo(cx+tw/2,by);x.lineTo(cx+tw/2+16,by+22);x.lineTo(cx+tw/2,by+44);x.lineTo(cx-tw/2,by+44);x.lineTo(cx-tw/2-16,by+22);x.closePath();x.fill();
+    x.fillStyle="#FFF8EA";x.fillText(nm,cx,by+33);
+    x.fillStyle=INK;x.font=`${AWB()} 28px ${AN}`;clampLines(x,it.a,320,2).forEach((l,k)=>x.fillText(l,cx,by+80+k*34));});
+  if(its.length){const [lx,ly]=SL[its.length-1];x.fillStyle=RED;x.font=`700 26px ${HS}`;x.fillText("আমি এখন এখানে",lx,ly-120);x.strokeStyle=RED;x.lineWidth=7;x.beginPath();x.moveTo(lx-16,ly-112+8);x.lineTo(lx+16,ly-112+40);x.moveTo(lx+16,ly-112+8);x.lineTo(lx-16,ly-112+40);x.stroke();}
+  x.textAlign="left";if(its.length<qaItems().filter(i=>i.k!=="next").length)OVER=true;
+  // ship to 2027
+  shipDraw(x,880,1690,1.1);x.save();x.strokeStyle=INK;x.lineWidth=3;x.setLineDash([8,10]);x.beginPath();x.moveTo(800,1600);x.quadraticCurveTo(840,1640,860,1690);x.stroke();x.restore();
+  x.textAlign="center";x.fillStyle=INK;x.font=`700 32px ${AT}`;x.fillText("পাল তুলে ২০২৭-এর দিকে",860,1780);if(nextIt){x.font=`${AW} 26px ${AN}`;clampLines(x,nextIt.a,300,2).forEach((l,k)=>x.fillText(l,880,1818+k*32));}
+  // real places inset
+  const pl=findPlaces();
+  if(pl.length){const bx=40,by2=1630,bw=260,bh=250;x.fillStyle="#F6EBD3";x.strokeStyle=INK;x.lineWidth=3;x.fillRect(bx,by2,bw,bh);x.strokeRect(bx,by2,bw,bh);
+    if(!BD_P2)BD_P2=BD_PATHS.map(p=>new Path2D(p));const s=.24,mx0=bx+(bw-600*s)/2,my0=by2+34;x.save();x.translate(mx0,my0);x.scale(s,s);x.fillStyle="#E6D3A3";BD_P2.forEach(p=>x.fill(p));x.strokeStyle=INK;x.lineWidth=3/s*.6;BD_P2.forEach(p=>x.stroke(p));x.restore();
+    pl.forEach((p,i)=>{const px=mx0+(p.lo-88)*0.9156625933395611*139.4177018878658*s,py=my0+(26.65-p.la)*139.4177018878658*s;x.fillStyle=RED;x.beginPath();x.arc(px,py,7,0,Math.PI*2);x.fill();});
+    x.fillStyle=INK;x.font=`700 24px ${HS}`;x.fillText("আসল যাত্রা",bx+bw/2,by2+26);x.font=`500 20px ${AN}`;x.fillText(clampLines(x,pl.map(p=>p.n).join(", "),bw-20,1)[0],bx+bw/2,by2+bh-12);}
+  // scale bar = rating
+  if(CS.showScore){const sx=pl.length?340:120,sy=1840;x.fillStyle=INK;x.font=`700 28px ${HS}`;x.textAlign="left";x.fillText("মাপকাঠি: বছরের রেটিং "+SC(),sx,sy-26);
+    for(let i=0;i<10;i++){x.fillStyle=i<A.score?INK:"#F6EBD3";x.fillRect(sx+i*36,sy,36,18);}x.strokeStyle=INK;x.lineWidth=2;x.strokeRect(sx,sy,360,18);}
+  x.textAlign="left";
+}
 /* ---------- landing sample card ---------- */
 async function drawHero(){
   const c=$("heroCard");if(!c)return;
