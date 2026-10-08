@@ -1,0 +1,81 @@
+/* Mobile-first polish; existing desktop visuals and card canvas rendering remain unchanged. */
+@media (max-width:859px){
+  html{-webkit-text-size-adjust:100%;scroll-padding-bottom:110px}
+  body{font-size:16px}
+  .screen{padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-left,0px)) calc(env(safe-area-inset-bottom,0px) + 18px);overscroll-behavior-y:contain}
+  .inner,.ed,.hero{min-width:0}
+  button,input,textarea,select{touch-action:manipulation}
+  .hbar{padding:4px 2px 10px}
+  .brand{font-size:20px}.hyr{font-size:22px}
+  .hgrid{gap:15px;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:12px 0 24px}
+  .htext{width:100%;align-items:center;text-align:center}
+  .hpre{font-size:clamp(22px,6vw,30px)}
+  .year{font-size:clamp(100px,29vw,168px);letter-spacing:-.055em;white-space:nowrap}
+  .hline{font-size:clamp(26px,7.2vw,38px);margin:12px 0 8px}
+  .sub{margin:5px auto 16px;font-size:16px}
+  #intro .cta{align-self:stretch;justify-content:center;width:100%;max-width:420px}
+  .hmeta{margin-top:10px}.hcard{padding:10px 0;align-self:center}
+  #heroCard{width:min(45vw,205px);max-height:31vh;object-fit:contain}
+  .spk.s1{left:-6px}.spk.s2{right:-8px}
+  .hfoot{font-size:13px}.hfoot .small{font-size:12px;line-height:1.4}
+  .top{gap:9px;padding-top:2px}.dots{gap:3px}.dots i{height:6px}
+  #ask .inner{min-height:100%;display:flex}
+  #ask .qwrap{margin:auto 0;padding:20px 0 24px}
+  .emoji{font-size:42px;margin-bottom:10px}.q{font-size:clamp(29px,8vw,41px);line-height:1.18}
+  .hint{font-size:15px;margin-bottom:20px}
+  .field{font-size:16px;min-height:48px;padding:10px 0;border-bottom-width:2px}
+  textarea.field{min-height:100px}
+  .pick{font-size:15px;min-height:46px;padding:9px 15px}
+  .picks{gap:9px}.trio{gap:14px}
+  .score b{font-size:clamp(80px,24vw,125px)}
+  #ask .bottom{position:sticky;bottom:calc(-1 * env(safe-area-inset-bottom,0px));z-index:5;margin:0 -16px calc(-1 * env(safe-area-inset-bottom,0px));padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--sbg);border-top:1px solid color-mix(in srgb,currentColor 18%,transparent)}
+  #ask .bottom .cta{flex:1;max-width:290px;justify-content:center}
+  .cta{min-height:52px;padding:12px 21px;font-size:17px}
+  .iconbtn{min-width:44px;min-height:44px}
+  #story .slide{padding:18px 5px}.big{font-size:clamp(34px,10vw,56px)}
+  .para{font-size:clamp(17px,4.4vw,21px)}
+  #edit{padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}
+  .edhead{padding:3px 0 8px}.edhead h2{font-size:23px;white-space:nowrap}
+  .edgrid{gap:8px}
+  .pvwrap{top:-8px;position:sticky;z-index:7;padding:8px 0 10px;background:var(--cream);border-bottom:1px solid rgba(46,18,57,.12)}
+  #pv{width:auto;max-width:100%;height:min(28vh,245px);max-height:245px;aspect-ratio:9/16;object-fit:contain}
+  #dragHint{font-size:12px;margin:3px 0}
+  .ctrls{gap:15px;padding-bottom:24px;min-width:0}
+  .tabs{position:sticky;top:calc(min(28vh,245px) + 15px);z-index:6;background:var(--cream);margin:0 -4px;padding:9px 4px 11px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+  .tabs button{scroll-snap-align:start;padding:10px 14px;min-height:46px;font-size:15px;white-space:nowrap}
+  .quick{gap:8px}.quick .ghost{flex:1;min-height:44px;font-size:14px}
+  .ctrls legend{font-size:20px;margin-bottom:12px}
+  .ctrls input[type=text],.ctrls textarea,.ctrls select{font-size:16px;min-height:48px}
+  .thumbs{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 10px}
+  .thumb{font-size:12px;min-width:0;line-height:1.4}
+  .thumb canvas{border-radius:12px}
+  .fontgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sw{column-gap:16px}.sw button{width:46px;height:46px}
+  .w3{gap:5px}.w3 input{min-width:0;padding:8px!important}
+  #edit .prow:has(#edShare){position:sticky;bottom:calc(-1 * env(safe-area-inset-bottom,0px));z-index:8;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--cream);box-shadow:0 -9px 24px rgba(46,18,57,.09);border-top:1px solid rgba(46,18,57,.12)}
+  #edShare{grid-column:1 / -1;width:100%;justify-content:center}
+  #edSave,#edVid{width:100%;font-size:15px;padding:9px 8px}
+  .vidov{padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px))}
+  .vidbox{width:100%;max-height:100%;overflow-y:auto}
+  .savebox img,.savebox video{max-height:48dvh}
+  #vidCanvas{width:auto;height:min(43dvh,280px);max-width:75vw}
+}
+@media (max-width:360px){
+  .brand{font-size:18px}.hyr{font-size:19px}
+  .year{font-size:27vw}.hline{font-size:25px}
+  .edhead h2{font-size:20px}
+  .thumbs{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tabs button{padding:8px 11px;font-size:14px}
+  .q{font-size:28px}.pick{font-size:14px}
+}
+@media (max-height:680px) and (max-width:859px){
+  .hgrid{gap:6px;padding:4px 0 12px}
+  .year{font-size:min(25vw,132px)}
+  .hline{margin:6px 0}.hcard{padding:2px 0}
+  #heroCard{max-height:22vh;width:auto}
+  .pvwrap #pv{height:22vh}
+  .tabs{top:calc(22vh + 15px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .tabs{scroll-behavior:auto}
+}
