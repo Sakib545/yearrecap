@@ -925,28 +925,43 @@ function header(x,T,o){
 function drawQA(x,T,H){
   const W=1080,L=70,IL=L,IR=W-L;
   const hasP=!!CS.photo;
-  header(x,T,{px:L,rf:84,ry:150,df:236,dy:380,maxW:hasP?580:660});
-  if(hasP){drawPhoto(x,"circle",W-70-330,64,330,330,T);if(CS.showScore)scoreBadge(x,W-92,340,74,T);}
-  else if(CS.showScore)scoreBadge(x,W-190,220,120,T);
-  let y=425;
+  // the 4:5 post is 570px shorter than the story but the masthead was the same size,
+  // eating 42% of the card before a single answer got drawn
+  const hs=H<1600?.78:1, R=v=>Math.round(v*hs);
+  header(x,T,{px:L,rf:R(84),ry:R(150),df:R(236),dy:R(380),maxW:hasP?580:660});
+  if(hasP){drawPhoto(x,"circle",W-70-R(330),R(64),R(330),R(330),T);if(CS.showScore)scoreBadge(x,W-92,R(340),R(74),T);}
+  else if(CS.showScore)scoreBadge(x,W-190,R(220),R(120),T);
+  let y=R(425);
   if(CS.name.trim()){
-    x.fillStyle=T.fg;const s=fit(x,CS.name.trim(),hasP?600:W-140,58,700,AT,34);x.font=`700 ${s}px ${AT}`;
-    const nw=x.measureText(CS.name.trim()).width;x.fillText(CS.name.trim(),L,y+54);
-    x.fillStyle=T.acc;x.beginPath();x.roundRect(L,y+76,Math.min(nw,160),8,4);x.fill();
-    y+=100;
+    x.fillStyle=T.fg;const s=fit(x,CS.name.trim(),hasP?600:W-140,R(58),700,AT,34);x.font=`700 ${s}px ${AT}`;
+    const nw=x.measureText(CS.name.trim()).width;x.fillText(CS.name.trim(),L,y+R(54));
+    x.fillStyle=T.acc;x.beginPath();x.roundRect(L,y+R(76),Math.min(nw,160),8,4);x.fill();
+    y+=R(100);
   }
-  y+=40;
+  y+=R(40);
   const items=CS.qa.filter(q=>q.on&&q.a.trim());
   const bottom=H-90;
   if(!items.length)return;
   const favs=items.filter(q=>FAVK.includes(q.k));
-  let sc=1.32,lay=null;
-  for(;sc>=.56;sc-=.04){lay=measure(x,favs,sc,IR-IL);if(y+lay.h<=bottom)break;}
+  // Shrink the type first, keeping one answer per row. Only if that still will not
+  // fit do short answers get paired two to a row, which is uglier but holds far more.
+  let lay=null,sc=.44;
+  outer:
+  for(const pair of [false,true]){
+    for(let t=1.32;t>=(pair?.44:.56);t-=.04){
+      const l=measure(x,favs,t,IR-IL,pair);
+      lay=l;sc=t;
+      if(y+l.h<=bottom)break outer;
+    }
+  }
   if(y+lay.h>bottom)OVER=true;
   const qs=Math.round(34*sc),as=Math.round(50*sc),lh=Math.round(as*1.32),gap=Math.round(44*sc),pillH=Math.round(qs*1.75);
+  const pillTop=pillH+Math.round(14*sc);
   let k=0;
   for(const it of lay.rows){
-    if(y>=bottom)break;
+    // a label with no answer under it is worse than no label, so never start a row
+    // that cannot hold its first line
+    if(y+(it.fav||it.pair?it.h:pillTop+lh)>bottom){OVER=true;break;}
     if(it.fav){
       const n=it.items.length,cw=(IR-IL-(n-1)*22)/n;
       it.items.forEach((f,j)=>{const cx=IL+j*(cw+22),col=T.bands[(k+j)%3];
@@ -954,28 +969,56 @@ function drawQA(x,T,H){
         x.fillStyle=col[1];x.font=`600 ${qs}px ${HS}`;x.globalAlpha=.9;x.fillText(clampLines(x,f.e+" "+f.q,cw-44,1)[0],cx+22,y+qs+20);x.globalAlpha=1;
         x.font=`${AW>=500?700:AW} ${as}px ${AN}`;f.ls.forEach((l,m)=>x.fillText(l,cx+22,y+qs+30+lh*(m+1)-lh*.25));});
       y+=it.h+gap;k+=n;
+    }else if(it.pair){
+      const cw=(IR-IL-22)/2;
+      it.items.forEach((f,j)=>{const cx=IL+j*(cw+22),col=T.bands[(k+j)%3];
+        x.font=`600 ${qs}px ${HS}`;const lbl=f.e+" "+f.q,pw=Math.min(cw,x.measureText(lbl).width+qs*1.4);
+        x.fillStyle=col[0];x.beginPath();x.roundRect(cx,y,pw,pillH,pillH/2);x.fill();
+        x.fillStyle=col[1];x.fillText(clampLines(x,lbl,pw-qs*1.1,1)[0],cx+qs*.7,y+pillH*.66);
+        x.fillStyle=T.fg;x.font=`${AW} ${as}px ${AN}`;
+        f.ls.forEach((l,m)=>x.fillText(l,cx+qs*.7,y+pillTop+lh*(m+1)-lh*.22));});
+      y+=it.h+gap;k+=2;
     }else{
       const col=T.bands[k%3];x.font=`600 ${qs}px ${HS}`;const lbl=it.e+" "+it.q,pw=x.measureText(lbl).width+qs*1.4;
       x.fillStyle=col[0];x.beginPath();x.roundRect(IL,y,pw,pillH,pillH/2);x.fill();
       x.fillStyle=col[1];x.fillText(lbl,IL+qs*.7,y+pillH*.66);
-      y+=pillH+Math.round(14*sc);x.fillStyle=T.fg;x.font=`${AW} ${as}px ${AN}`;
+      y+=pillTop;x.fillStyle=T.fg;x.font=`${AW} ${as}px ${AN}`;
       for(const l of it.ls){if(y+lh>bottom+20){OVER=true;break;}x.fillText(l,IL+qs*.7,y+lh*.78);y+=lh;}
       y+=gap;k++;
     }
   }
 }
-function measure(x,favs,sc,width){
+function measure(x,favs,sc,width,pair){
   const qs=Math.round(34*sc),as=Math.round(50*sc),lh=Math.round(as*1.32),gap=Math.round(44*sc),pillH=Math.round(qs*1.75);
-  const maxL=sc>.72?3:2;let h=0;const rows=[];let favDone=false;
+  const maxL=sc>.72?3:2,pillTop=pillH+Math.round(14*sc),colW=(width-22)/2,inner=qs*.7+8;
+  let favDone=false;const queue=[];
   for(const q of CS.qa.filter(q=>q.on&&q.a.trim())){
     if(FAVK.includes(q.k)){if(favDone)continue;favDone=true;
       const n=favs.length,cw=(width-(n-1)*22)/n;x.font=`${AW>=500?700:AW} ${as}px ${AN}`;
       const its=favs.map(f=>({...f,ls:clampLines(x,f.a.trim(),cw-44,2)}));
-      const bh=qs+30+lh*Math.max(...its.map(i=>i.ls.length))+20;rows.push({fav:true,items:its,h:bh});h+=bh+gap;continue;}
-    x.font=`${AW} ${as}px ${AN}`;const ls=clampLines(x,q.a.trim(),width-qs*.7-8,maxL);
-    rows.push({...q,q:q.q||"আমার প্রশ্ন",ls});h+=pillH+Math.round(14*sc)+ls.length*lh+gap;
+      const bh=qs+30+lh*Math.max(...its.map(i=>i.ls.length))+20;queue.push({fav:true,items:its,h:bh});continue;}
+    const a=q.a.trim();x.font=`${AW} ${as}px ${AN}`;
+    const ls=clampLines(x,a,width-inner,maxL);
+    // "short" means it still reads in full at half width, so pairing loses nothing.
+    // Each half is measured in the font that actually draws it.
+    let short=false;
+    if(pair&&lines(x,a,colW-inner).length===1){
+      x.font=`600 ${qs}px ${HS}`;
+      short=x.measureText(q.e+" "+(q.q||"")).width+qs*1.4<=colW;
+    }
+    queue.push({...q,q:q.q||"আমার প্রশ্ন",ls,short,h:pillTop+ls.length*lh});
   }
-  return{rows,h:h-gap};
+  const rows=[];
+  for(let i=0;i<queue.length;i++){
+    const a=queue[i],b=queue[i+1];
+    if(a.short&&b&&b.short){
+      x.font=`${AW} ${as}px ${AN}`;
+      rows.push({pair:true,h:pillTop+lh,
+        items:[a,b].map(q=>({...q,ls:clampLines(x,q.a.trim(),colW-inner,1)}))});
+      i++;
+    }else rows.push(a);
+  }
+  return{rows,h:rows.reduce((t,r)=>t+r.h+gap,0)-gap};
 }
 
 /* ---- layout 2: poster ---- */
@@ -1011,7 +1054,11 @@ function drawPoster(x,T,H){
 }
 
 /* ---------- editor ---------- */
-let raf=0;const redraw=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{drawCard($("pv"));$("fitMsg").textContent=OVER?"সব লেখা কার্ডে আঁটছে না। কয়েকটার টিক তুলে দাও বা উত্তর ছোট করো।":"";});};
+let raf=0;const redraw=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{drawCard($("pv"));
+  // the classic design packs the most answers, so say so instead of only asking them to cut
+  $("fitMsg").textContent=!OVER?"":CS.layout==="qa"
+    ?"সব লেখা কার্ডে আঁটছে না। কয়েকটার টিক তুলে দাও বা উত্তর ছোট করো।"
+    :"এই ডিজাইনে এতগুলো উত্তর আঁটে না। সবগুলো রাখতে চাইলে ডিজাইন ট্যাব থেকে \u201cক্লাসিক\u201d বেছে নাও, নয়তো কয়েকটার টিক তুলে দাও।";});};
 const TOG=[["showScore","নম্বর"],["showWords","তিন শব্দ"],["showQuote","তোমার কথা"],["showAward","অ্যাওয়ার্ড"]];
 const ALWAYS_TOG=[["showTag","সাইটের নাম"]];
 let CURTAB="design";
@@ -1079,7 +1126,7 @@ $("eQuote").oninput=e=>{CS.quote=e.target.value;redraw();};
 $("eAward").onchange=e=>{CS.award=+e.target.value;redraw();};
 $("edBack").onclick=()=>{show("story");goSlide(S.length-1);};
 $("edSave").onclick=()=>saveCard($("pv"),"edMsg");$("edVid").onclick=()=>makeVideo("edMsg");
-$("addQ").onclick=()=>{if(CS.qa.filter(q=>q.custom).length>=3)return;CS.qa.push({k:"c"+Date.now(),e:"✨",q:"",a:"",on:true,custom:true});renderLayoutUI();redraw();
+$("addQ").onclick=()=>{if(CS.qa.filter(q=>q.custom).length>=6)return;CS.qa.push({k:"c"+Date.now(),e:"✨",q:"",a:"",on:true,custom:true});renderLayoutUI();redraw();
   const items=$("qaList").querySelectorAll(".cq");if(items.length)items[items.length-1].focus();};$("edShare").onclick=()=>shareCard($("pv"),"edMsg");
 function renderLayoutUI(keepThumbs){
   if(!keepThumbs||!$("layouts").children.length){
@@ -1097,10 +1144,10 @@ function renderLayoutUI(keepThumbs){
   $("fontPicks").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.font=b.dataset.f;CS.fontTouched=true;$("resetLook").hidden=false;$("fontPicks").querySelectorAll(".pick").forEach(z=>z.setAttribute("aria-pressed",z===b));
     ensureFont(CS.font).then(()=>{const F=FONTS[CS.font];const miss=[F.f,F.b].filter(Boolean).map(z=>z.replace(/"/g,"")).filter(z=>FONT_FILES[z]&&!FONT_OK[z]);
       $("edMsg").textContent=miss.length?`"${miss.join(", ")}" ফন্ট লোড হয়নি। fonts ফোল্ডারে ফাইলটা আছে কিনা দেখো।`:"";
-      if(CS.fmt==="post"&&CS.layout==="qa")autoFit();redraw();});});
+      if(CS.fmt==="post"&&CS.layout==="qa"){undoAutoFit();autoFit();}redraw();});});
   $("fmtField").hidden=!(CS.layout==="qa"||CS.layout==="blob");
   $("fmts").innerHTML=[["story","স্টোরি (৯:১৬)"],["post","ফিড পোস্ট (৪:৫)"]].map(([k,l])=>`<button type="button" class="pick" data-f="${k}" aria-pressed="${CS.fmt===k}">${l}</button>`).join("");
-  $("fmts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.fmt=b.dataset.f;if(CS.fmt==="post"&&CS.layout==="qa")autoFit();renderLayoutUI();redraw();});
+  $("fmts").querySelectorAll(".pick").forEach(b=>b.onclick=()=>{CS.fmt=b.dataset.f;undoAutoFit();if(CS.fmt==="post"&&CS.layout==="qa")autoFit();renderLayoutUI();redraw();});
   $("posterFields").hidden=!["poster","blob","magazine","letter","game","news","search","memorypass","paper2","profile"].includes(CS.layout);$("qaFields").hidden=["poster","blob","collage"].includes(CS.layout);
   $("collageField").hidden=CS.layout!=="collage";$("memField").hidden=true;$("photoField").hidden=CS.layout==="collage";
   $("patPicks").innerHTML=[["none","কিছু না"],["rickshaw","রিকশা আর্ট"],["kantha","নকশি কাঁথা"]].map(([k,l])=>`<button type="button" class="pick" data-p="${k}" aria-pressed="${CS.pattern===k}">${l}</button>`).join("");
@@ -1108,16 +1155,18 @@ function renderLayoutUI(keepThumbs){
   renderCollageUI();renderMemUI();
   $("qaList").innerHTML=CS.qa.map((q,i)=>`<div class="qa-item${q.on?"":" off"}" data-i="${i}">${q.custom?`<div class="qrow"><input type="checkbox" ${q.on?"checked":""} aria-label="কার্ডে রাখো"><input type="text" class="cq" maxlength="40" placeholder="তোমার প্রশ্ন লেখো" value="${esc(q.q)}"><button type="button" class="rmq" aria-label="প্রশ্নটা সরাও">✕</button></div>`:`<label><input type="checkbox" ${q.on?"checked":""}> ${q.e} ${q.q}</label>`}<textarea maxlength="160" aria-label="${q.q}" placeholder="তোমার উত্তর লেখো">${esc(q.a)}</textarea></div>`).join("");
   $("qaList").querySelectorAll(".qa-item").forEach(el=>{const q=CS.qa[+el.dataset.i];
-    el.querySelector("input").onchange=e=>{q.on=e.target.checked;el.classList.toggle("off",!q.on);redraw();};
-    el.querySelector("textarea").oninput=e=>{q.a=e.target.value;if(q.a.trim()&&!q.on){q.on=true;el.querySelector("input").checked=true;el.classList.remove("off");}redraw();};
+    el.querySelector("input").onchange=e=>{q.on=e.target.checked;q.autoOff=false;el.classList.toggle("off",!q.on);redraw();};
+    el.querySelector("textarea").oninput=e=>{q.a=e.target.value;if(q.a.trim()&&!q.on){q.on=true;q.autoOff=false;el.querySelector("input").checked=true;el.classList.remove("off");}redraw();};
     const cq=el.querySelector(".cq");if(cq)cq.oninput=e=>{q.q=e.target.value;redraw();};
     const rm=el.querySelector(".rmq");if(rm)rm.onclick=()=>{CS.qa=CS.qa.filter(z=>z!==q);renderLayoutUI();redraw();};});
-  $("addQ").hidden=CS.qa.filter(q=>q.custom).length>=3;
+  $("addQ").hidden=CS.qa.filter(q=>q.custom).length>=6;
 }
 // in the smaller post size, drop the least important answers until everything fits
 function autoFit(){const c=document.createElement("canvas");c.width=1080;
   const order=["hard","song","travel","person","learn","food","next","win","happy","three"];
-  drawCard(c);for(const k of order){if(!OVER)break;const q=CS.qa.find(z=>z.k===k);if(q&&q.on){q.on=false;drawCard(c);}}}
+  drawCard(c);for(const k of order){if(!OVER)break;const q=CS.qa.find(z=>z.k===k);if(q&&q.on){q.on=false;q.autoOff=true;drawCard(c);}}}
+// whatever autoFit switched off belongs to the user, not to the format they last looked at
+function undoAutoFit(){CS.qa.forEach(q=>{if(q.autoOff){q.on=true;q.autoOff=false;}});}
 function syncPhotoUI(){
   const has=!!CS.photo;$("photoCtl").hidden=!has;$("dragHint").hidden=!has;$("pv").classList.toggle("dragok",has);
   $("fileLbl").textContent=has?"📷 অন্য ছবি দাও":"📷 ছবি দাও";$("zoom").value=CS.zoom;
