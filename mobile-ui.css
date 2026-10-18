@@ -83,7 +83,8 @@
 /* landing sections below the hero */
 @media (max-width:859px){
   .htext .hbadge{align-self:center;margin-bottom:10px;font-size:13.5px;padding:6px 14px}
-  ul.hmeta{justify-content:center;margin-top:12px}
+  ul.hmeta{justify-content:center;margin-top:10px}
+  .hint3{margin-top:5px;font-size:14px}
   .scrollcue{font-size:14px}
   .hfoot{display:flex;justify-content:center}
   .lsec{padding:40px 0}

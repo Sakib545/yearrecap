@@ -1,5 +1,5 @@
 /*
-  Rebuilds og.png — the picture that shows up when the link is pasted in
+  Rebuilds og.jpg — the picture that shows up when the link is pasted in
   Messenger, WhatsApp or Facebook.
 
   The three cards in it are drawn by the site's own card renderer, so the
@@ -60,7 +60,9 @@ await og.evaluate(srcs => srcs.forEach((s, i) => { document.getElementById('c' +
 await og.waitForFunction(() => [...document.querySelectorAll('.right img')].every(i => i.complete && i.naturalWidth));
 await og.evaluate(() => document.fonts.ready);
 await og.waitForTimeout(600);
-writeFileSync(join(ROOT, 'og.png'), await og.screenshot({ type: 'png' }));
+// JPEG, not PNG: the PNG of this came out at 620KB and WhatsApp quietly drops
+// previews over its size limit. q90 is 138KB and visually identical here.
+writeFileSync(join(ROOT, 'og.jpg'), await og.screenshot({ type: 'jpeg', quality: 90 }));
 await browser.close();
 
-console.log('og.png rebuilt (1200x630)');
+console.log('og.jpg rebuilt (1200x630)');
