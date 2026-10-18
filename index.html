@@ -129,6 +129,10 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
 .scale{display:flex;justify-content:space-between;font-size:15px;opacity:.75}
 .bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .err{font-weight:600;min-height:1.4em;margin:10px 0 0}
+.ghost.express{width:100%;justify-content:center;display:flex;align-items:center;margin:4px 0 14px;
+  font-size:16px;min-height:48px;opacity:.8;border:2px dashed currentColor}
+.ghost.express:hover{opacity:1}
+.hint3{margin-top:8px;opacity:.6}
 
 /* ---------- loading ---------- */
 #loading{--sbg:var(--pink);--sfg:var(--cream);justify-content:center}
@@ -169,6 +173,8 @@ input[type=range]{width:100%;accent-color:var(--sfg);height:36px;margin-top:6px}
 .sharewrap img{width:min(68vw,300px);border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.35);transform:rotate(-2deg)}
 .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .ghost{border:2px solid currentColor;background:transparent;border-radius:999px;padding:12px 22px;font-weight:700;cursor:pointer;min-height:50px}
+.more{border-style:dashed;opacity:.85}
+.more:hover{opacity:1}
 .msg{min-height:1.5em;font-weight:600;text-align:center;margin:0}
 
 /* ---------- card editor ---------- */
@@ -358,6 +364,7 @@ details.fq p{margin:0 0 18px;opacity:.78;font-size:16.5px}
     <p class="sub">কয়েকটা উত্তর দাও — বাকিটা সাজিয়ে দেবো। তোমার বছরের গল্প, শেয়ার করার কার্ড, এমনকি ভিডিও।</p>
     <button class="cta" id="start">আমার গল্প বানাই <span aria-hidden="true">→</span></button>
     <ul class="hmeta"><li>৩ মিনিট</li><li>১১টি প্রশ্ন</li><li>৩৫টা ডিজাইন</li></ul>
+    <p class="small hint3">তাড়া থাকলে ৩ প্রশ্নেই কার্ড পেয়ে যাবে ⚡</p>
     <p class="small" id="resume" hidden></p>
    </div>
    <div class="hcard">
@@ -448,6 +455,7 @@ details.fq p{margin:0 0 18px;opacity:.78;font-size:16.5px}
     </div>
     <div class="qwrap" id="qbox" aria-live="polite"></div>
     <p class="err" id="err" role="alert"></p>
+    <button type="button" class="ghost express" id="expressGo" hidden>⚡ এখনই কার্ড বানিয়ে ফেলি</button>
     <div class="bottom">
       <button class="iconbtn" id="skip">বাদ দাও</button>
       <button class="cta" id="next">পরেরটা</button>
@@ -587,12 +595,20 @@ const Q=[
  {k:"tone",e:"🎨",q:"গল্পটা কেমন সুরে লিখবো?",h:"",type:"choice",opts:["মজার","আবেগী","অনুপ্রেরণামূলক"]},
 ];
 let qi=0; let A={score:7,tone:"মজার"};
+/* someone who bails at question 7 should still leave with a card, not with nothing.
+   EXPRESS marks a story built from a partial set of answers. */
+let EXPRESS=false;
+const EXPRESS_FROM=2;  // name + score + three words is enough for a card
+const blank=s=>s.type==="trio"?!s.f.some(([k])=>String(A[k]||"").trim()):!String(A[s.k]||"").trim();
+const unanswered=()=>Q.map((s,i)=>[s,i]).filter(([s,i])=>i>EXPRESS_FROM&&s.type!=="choice"&&blank(s));
 try{const s=JSON.parse(localStorage.getItem("amar2026")||"null");if(s&&s.name){A={...A,...s};$("resume").hidden=false;$("resume").textContent=`${s.name}, আগের উত্তরগুলো রাখা আছে।`;}}catch(e){}
 const keep=()=>{try{localStorage.setItem("amar2026",JSON.stringify(A));}catch(e){}};
 
 $("dots").innerHTML=Q.map(()=>"<i></i>").join("");
 function renderQ(){
   const s=Q[qi]; paint($("ask"),qi); $("err").textContent="";
+  $("expressGo").hidden=qi<EXPRESS_FROM||!unanswered().length;
+  track("q_view",{i:qi,k:s.k});
   [...$("dots").children].forEach((d,j)=>d.classList.toggle("on",j<=qi));
   let h=`<span class="emoji" aria-hidden="true">${s.e}</span><h2 class="q" id="qh">${s.q}</h2>${s.h?`<p class="hint">${s.h}</p>`:""}`;
   if(s.type==="input")h+=`<input class="field" id="f" aria-labelledby="qh" maxlength="160" placeholder="${s.ph}" autocomplete="off">`;
@@ -622,15 +638,21 @@ function save(){const s=Q[qi];
   if(s.type==="trio")s.f.forEach(([k])=>A[k]=$("t_"+k).value.trim());
   keep();}
 function go(d,skip){
+  if(skip)track("q_skip",{i:qi,k:Q[qi].k});else if(d<0)track("q_back",{i:qi});
   if(skip){const s=Q[qi];if(s.type==="trio")s.f.forEach(([k])=>A[k]="");else A[s.k]="";keep();} else save();
   if(d>0&&Q[qi].req&&!A[Q[qi].k]){$("err").textContent="নামটা লাগবে, কার্ডে বসবে।";return;}
   if(d>0&&qi===Q.length-1)return generate();
   qi=Math.max(0,qi+d);renderQ();}
-const begin=()=>{qi=0;show("ask");renderQ();};
+const begin=()=>{EXPRESS=false;qi=0;track("start",{resumed:!!A.name});show("ask");renderQ();};
 $("start").onclick=begin;$("start2").onclick=begin;
 $("next").onclick=()=>go(1);
 $("skip").onclick=()=>go(1,true);
 $("back").onclick=()=>go(-1);
+$("expressGo").onclick=()=>{
+  save();
+  if(!A.name){$("err").textContent="নামটা লাগবে, কার্ডে বসবে।";return;}
+  EXPRESS=true;track("express_card",{at:qi,left:unanswered().length});generate();
+};
 
 /* ---------- generate ---------- */
 const MSGS=["তোমার গল্প লেখা হচ্ছে…","খুশির দিনগুলো খুঁজে বের করছি…","অ্যাওয়ার্ড ঠিক করা হচ্ছে…","শেষ লাইনটা ঘষামাজা চলছে…"];
@@ -666,7 +688,7 @@ async function generate(){
     }
   }catch(e){d=null;}
   clearInterval(t);
-  R=(d&&d.title)?d:local();track("recap_made",{ai:!!(d&&d.title)});
+  R=(d&&d.title)?d:local();track("recap_made",{ai:!!(d&&d.title),express:EXPRESS,left:unanswered().length});
   if(!R.words||!R.words.length)R.words=local().words;
   startStory();
 }
@@ -719,9 +741,11 @@ function buildSlides(){
   if(R.awards&&R.awards.length)S.push({dur:9,html:`<h2 class="big">বছরের অ্যাওয়ার্ড</h2>${R.awards.map(a=>`<div class="award"><b>🏆 ${esc(a.name)}</b><span>${esc(a.reason)}</span></div>`).join("")}`});
   S.push({html:`<p class="kicker">সামনে ২০২৭</p><h2 class="big">${esc(R.closing)}</h2>`});
   if(VIEW){S.push({final:true,html:`<div class="sharewrap"><canvas id="storycard" width="1080" height="1920" role="img" aria-label="${esc(A.name)}-এর ২০২৬ কার্ড"></canvas><p class="para" style="text-align:center">এটা ${esc(A.name)}-এর ২০২৬</p><div class="row"><button class="cta" id="mine">তুমিও নিজেরটা বানাও</button></div><div class="row"><button class="ghost" id="replay">আবার দেখো</button></div></div>`});return;}
-  S.push({final:true,html:`<div class="sharewrap"><canvas id="storycard" width="1080" height="1920" role="img" aria-label="তোমার ২০২৬ কার্ড"></canvas><div class="row"><button class="cta" id="edOpen">✏️ ছবি দাও, কার্ড সাজাও</button></div><div class="row"><button class="ghost" id="vid">🎬 ভিডিও বানাও</button><button class="ghost" id="lnk">🔗 লিংক শেয়ার</button></div><div class="row"><button class="ghost" id="sh">শেয়ার করো</button><button class="ghost" id="dl">সেভ করো</button><button class="ghost" id="cp">লেখা কপি</button><button class="ghost" id="replay">আবার দেখো</button></div><p class="msg" id="msg" aria-live="polite"></p></div>`});
+  const left=EXPRESS?unanswered().length:0;
+  S.push({final:true,html:`<div class="sharewrap"><canvas id="storycard" width="1080" height="1920" role="img" aria-label="তোমার ২০২৬ কার্ড"></canvas>${left?`<div class="row"><button class="ghost more" id="moreQ">✍️ আরও ${bn(left)}টা প্রশ্ন, পুরো গল্প</button></div>`:""}<div class="row"><button class="cta" id="edOpen">✏️ ছবি দাও, কার্ড সাজাও</button></div><div class="row"><button class="ghost" id="vid">🎬 ভিডিও বানাও</button><button class="ghost" id="lnk">🔗 লিংক শেয়ার</button></div><div class="row"><button class="ghost" id="sh">শেয়ার করো</button><button class="ghost" id="dl">সেভ করো</button><button class="ghost" id="cp">লেখা কপি</button><button class="ghost" id="replay">আবার দেখো</button></div><p class="msg" id="msg" aria-live="polite"></p></div>`});
 }
-function startStory(){buildSlides();initCS();si=0;$("who").textContent=A.name+"-এর ২০২৬";show("story");$("bars").innerHTML=S.map(()=>"<i></i>").join("");fontsReady=loadFonts();goSlide(0);}
+function startStory(){buildSlides();initCS();
+  if(EXPRESS){const r=REC.blob;Object.assign(CS,{layout:"blob",font:r[0],theme:r[1]});}si=0;$("who").textContent=A.name+"-এর ২০২৬";show("story");$("bars").innerHTML=S.map(()=>"<i></i>").join("");fontsReady=loadFonts();goSlide(0);}
 function goSlide(n){
   if(n<0)n=0; if(n>=S.length)n=S.length-1; si=n;
   const sl=S[n]; paint($("story"),n);
@@ -738,6 +762,9 @@ function wireFinal(){
   $("vid").onclick=()=>makeVideo("msg");$("lnk").onclick=()=>shareLink("msg");
   $("dl").onclick=()=>saveCard(sc,"msg");$("sh").onclick=()=>shareCard(sc,"msg");$("cp").onclick=copyText;$("replay").onclick=()=>goSlide(0);
   $("edOpen").onclick=openEditor;
+  const mq=$("moreQ");
+  if(mq)mq.onclick=()=>{const u=unanswered();track("express_continue",{left:u.length});
+    EXPRESS=false;qi=u.length?u[0][1]:EXPRESS_FROM+1;show("ask");renderQ();};
 }
 $("tprev").onclick=()=>goSlide(si-1);
 $("tnext").onclick=()=>goSlide(si+1);
@@ -745,7 +772,7 @@ const tap=$("tap");
 tap.addEventListener("pointerdown",()=>$("bars").classList.add("paused"));
 ["pointerup","pointercancel","pointerleave"].forEach(ev=>tap.addEventListener(ev,()=>$("bars").classList.remove("paused")));
 document.addEventListener("keydown",e=>{if($("story").hidden)return;if(e.key==="ArrowRight")goSlide(si+1);if(e.key==="ArrowLeft")goSlide(si-1);});
-$("restart").onclick=()=>{if(VIEW)return goMine();qi=0;show("ask");renderQ();};
+$("restart").onclick=()=>{if(VIEW)return goMine();EXPRESS=false;qi=0;show("ask");renderQ();};
 
 /* ---------- share card 1080x1920 ---------- */
 const TC={
