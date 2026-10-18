@@ -5,11 +5,27 @@
 ## ফাইল
 
 - `index.html` – পুরো সাইট (একটাই ফাইল, কোনো build লাগে না)
+- `mobile-ui.css` – ফোনের জন্য বাড়তি স্টাইল
 - `api/recap.js` – Vercel serverless function, AI দিয়ে গল্প লেখে
 - `fonts/` – কার্ড আর সাইটের বাংলা ফন্ট (লাইসেন্স নোট ভেতরের README.txt-এ)
 - `og.png` – লিংক শেয়ার করলে যে প্রিভিউ ছবি আসে
+- `scripts/make-og.mjs`, `scripts/og-template.html` – `og.png` আবার বানানোর স্ক্রিপ্ট (ভেতরের কার্ডগুলো সাইটের নিজের রেন্ডারার দিয়েই আঁকা হয়)
+- `icon.svg`, `apple-touch-icon.png`, `site.webmanifest` – ট্যাব আর হোম-স্ক্রিন আইকন
+- `robots.txt`, `sitemap.xml` – সার্চ ইঞ্জিনের জন্য
 - `TESTING.md` – লঞ্চের আগে ফোনে টেস্টের চেকলিস্ট
 - `package.json`, `.gitignore`
+
+## শেয়ার কার্ডে সাইটের নাম
+
+প্রতিটা কার্ডের নিচে ছোট করে `recapmyyear.xyz` বসে — কেউ স্ক্রিনশট নিয়ে পোস্ট করলেও পরের জন সাইটটা খুঁজে পায়। কার্ড সাজানোর পাতায় **লেখা → সাইটের নাম** থেকে চাইলে তুলে দেওয়া যায়।
+
+## og.png আবার বানানো
+
+```bash
+python3 -m http.server 8777 &
+npx playwright@1.56.1 install chromium   # প্রথমবার
+node scripts/make-og.mjs
+```
 
 ## Vercel-এ deploy
 

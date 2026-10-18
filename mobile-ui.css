@@ -7,15 +7,15 @@
   button,input,textarea,select{touch-action:manipulation}
   .hbar{padding:4px 2px 10px}
   .brand{font-size:20px}.hyr{font-size:22px}
-  .hgrid{gap:15px;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:12px 0 24px}
+  .hgrid{gap:13px;display:flex;flex-direction:column;align-items:stretch;justify-content:center;padding:6px 0 10px}
   .htext{width:100%;align-items:center;text-align:center}
   .hpre{font-size:clamp(22px,6vw,30px)}
   .year{font-size:clamp(100px,29vw,168px);letter-spacing:-.055em;white-space:nowrap}
   .hline{font-size:clamp(26px,7.2vw,38px);margin:12px 0 8px}
-  .sub{margin:5px auto 16px;font-size:16px}
+  .sub{margin:5px auto 14px;font-size:16px}
   #intro .cta{align-self:stretch;justify-content:center;width:100%;max-width:420px}
   .hmeta{margin-top:10px}.hcard{padding:10px 0;align-self:center}
-  #heroCard{width:min(45vw,205px);max-height:31vh;object-fit:contain}
+  #heroCard{width:min(45vw,205px);max-height:25vh;object-fit:contain}
   .spk.s1{left:-6px}.spk.s2{right:-8px}
   .hfoot{font-size:13px}.hfoot .small{font-size:12px;line-height:1.4}
   .top{gap:9px;padding-top:2px}.dots{gap:3px}.dots i{height:6px}
@@ -78,4 +78,28 @@
 }
 @media (prefers-reduced-motion:reduce){
   .tabs{scroll-behavior:auto}
+}
+
+/* landing sections below the hero */
+@media (max-width:859px){
+  .htext .hbadge{align-self:center;margin-bottom:10px;font-size:13.5px;padding:6px 14px}
+  ul.hmeta{justify-content:center;margin-top:12px}
+  .scrollcue{font-size:14px}
+  .hfoot{display:flex;justify-content:center}
+  .lsec{padding:40px 0}
+  .lh{font-size:clamp(25px,6.6vw,34px)}
+  .lp{margin-bottom:22px}
+  .stats{gap:10px}
+  .stat{padding:17px 15px;border-radius:17px}
+  .stat span{font-size:14px}
+  .step{padding:20px 18px}
+  .step b{width:40px;height:40px;font-size:20px;margin-bottom:11px}
+  .step h3,.feat h3{font-size:20px}
+  .step p,.feat p,details.fq p{font-size:15.5px}
+  .feat{padding:16px;gap:12px}
+  .chip{font-size:14px;padding:8px 14px}
+  details.fq{padding:0 16px}
+  details.fq summary{font-size:17px;padding:15px 0}
+  .lend{padding:44px 0 34px}
+  .lfoot{font-size:12.5px;line-height:1.45}
 }

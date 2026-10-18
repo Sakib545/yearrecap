@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="আমার ২০২৬">
+  <rect width="64" height="64" rx="14" fill="#2E1239"/>
+  <path d="M34 10 L38.5 25.5 L54 30 L38.5 34.5 L34 50 L29.5 34.5 L14 30 L29.5 25.5 Z" fill="#FFC72C"/>
+  <path d="M17 42 L19 48.5 L25.5 50.5 L19 52.5 L17 59 L15 52.5 L8.5 50.5 L15 48.5 Z" fill="#E8367C"/>
+  <circle cx="51" cy="15" r="4.5" fill="#4FD08F"/>
+</svg>
